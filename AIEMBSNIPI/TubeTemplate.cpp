@@ -12,7 +12,7 @@ int main()
     PhaseInfo Liquid;
     PhaseInfo Gas;
     double Bo, Bg, Rs, D, qo, qw_ny, qo_ny, qg_ny, fo, fw, Bw, qw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
-    //   
+    //  начальные условия  
 
     //      
     qo_ny = 1590.0 / 86400;
@@ -40,18 +40,18 @@ int main()
     fo = qo / (qw + qo);
     fw = 1 - fo;
 
-    //   
+    // ненужные данные   
     Rsw = 0;
     rho_w = 1000;
     mu_w = 1;
 
-    //  
+    //работа с жидкостью
     Liquid.q = qo + qw;
     Liquid.mu = mu_o * fo + mu_w * fw;
     Liquid.rho = rho_o * fo + rho_w * fw;
     Liquid.rho_sc = Liquid.rho;
 
-    //   
+    //работаем с газом 
     qg_ny = 283000.0 / 86400;
     Gas.mu = 0.000016;
     Gas.q = (qg_ny - qo_ny * Rs - qw_ny * Rsw) * Bg;
@@ -59,12 +59,12 @@ int main()
     Gas.rho_sc = Gas.rho;
     Angle = 90;
 
-    //    
+    //работа с взаимодействием фаз 
     PhaseInteract PhaseInteract;
     PhaseInteract.lgSurfaceTension = 0.00841;
     Result grad;
 
-    // 
+    // реализация
     FlowMapOrkizhevskiy myex = FlowMapOrkizhevskiy();
     grad = myex.calc(Liquid, Gas, PhaseInteract, D, 0.000018288, 90, 117.13 * 100000, 82);
     std::cout << grad.pressureGradient << "\n";
