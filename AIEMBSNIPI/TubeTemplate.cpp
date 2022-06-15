@@ -14,20 +14,20 @@ int main()
     double Bo, Bg, Rs, D, qo, qw_ny, qo_ny, qg_ny, fo, fw, Bw, qw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
     //  начальные условия  
 
-    //      
+    //расход по фазе у нефти нач усл
     qo_ny = 1590.0 / 86400;
-    //     
+    //расход по фазе у воды 
     qw_ny = 0;
-    // 
+    //диаметр 
     D = 0.1524;
 
     Bo = 1.197;
     Bg = 0.0091;
     Bw = 0.0;
 
-    //  
+    // вязкость нефти
     mu_o = 0.00097;
-    // 
+    // шереховатость
     Roughness = 0.000018288;
     PInflow = 117.13 * 100000;
     TInflow = 82;
