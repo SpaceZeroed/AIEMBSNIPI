@@ -3,7 +3,6 @@
 namespace flowmaps {
 	Pressure::Pressure()
 	{
-       
         //расход по фазе у нефти нач усл
         qo_ny = 1590.0 / 86400;
         //расход по фазе у воды 
@@ -48,14 +47,16 @@ namespace flowmaps {
         Gas.rho = 94.19;
         Gas.rho_sc = Gas.rho;
         Angle = 90;
-
+	}
+    double Pressure::answer()
+    {
         //работа с взаимодействием фаз 
         PhaseInteract PhaseInteract;
         PhaseInteract.lgSurfaceTension = 0.00841;
         Result grad;
-
         // реализация
         FlowMapOrkizhevskiy myex = FlowMapOrkizhevskiy();
         grad = myex.calc(Liquid, Gas, PhaseInteract, D, 0.000018288, 90, 117.13 * 100000, 82);
-	}
+        return grad.pressureGradient;
+    }
 }

@@ -4,6 +4,7 @@ namespace flowmaps {
 	{
 	public:
 		Pressure();
+		double answer();
 	private:
 		PhaseInfo Liquid;
 		PhaseInfo Gas;
