@@ -21,7 +21,11 @@ namespace flowmaps
         Unknown
     };
 
-
+    enum class MainFase
+    {
+        Water,
+        Oil
+    };
 
     struct PhaseInfo
     {
@@ -107,27 +111,15 @@ namespace flowmaps
     {
     public:
         virtual Result calc(
-            const PhaseInfo& Liquid,
-            const PhaseInfo& Gas,
-            const PhaseInteract& PhaseInteract,
+
             double D,
             double Roughness,
             double Angle,
             double PInflow,
             double TInflow) = 0;
-        //virtual void setUseSmoothing(bool Value) = 0;
     };
+
     using FlowMapLiquidGasPtr = std::shared_ptr<IFlowMapLiquidGas>;
 
-    /// јбстрактна€ коррел€ци€ дл€ однофазного трени€
-    /*class SinglePhaseFriction
-    {
-      public:
-        // ѕередаем число Re и относительную(!) шероховатость
-        virtual double value(double Re, double Rough) = 0;
-    };
-    using SinglePhaseFrictionPtr = std::shared_ptr<SinglePhaseFriction>;*/
-
-    // ============================================================================
 
 } // namespace flowmaps
