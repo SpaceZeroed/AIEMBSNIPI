@@ -50,7 +50,6 @@ namespace flowmaps
         res.liquidVelocity = Liquid.q / Ap;//Vsl
         res.gasVelocity = Gas.q / Ap;
         res.Re_L = Liquid.rho * res.fluidMeanVelocity * D / Liquid.mu;//4.66
-        std::cout << res.Re_L << "\n";
         Vb2 = 0.5 * sqrt(g * D);//4.71
         Re_B = Liquid.rho * Vb2 * D / Liquid.mu;//4.66
 
@@ -91,7 +90,6 @@ namespace flowmaps
         mu_n = Liquid.mu * lambda_L + Gas.mu * (1 - lambda_L);//3.23
         res.Re = pn * res.fluidMeanVelocity * D / mu_n;
         res.frictionFactor = pow(-2 * log10(2 * Ed / 3.7 - (5.02 / res.Re) * log10(2 * Ed / 3.7 + 13 / res.Re)), -2);//2.19
-        std::cout << res.frictionFactor << "\n";
         res.pressureGradientFriction = ((res.liquidVelocity + Vb2) / (res.fluidMeanVelocity + Vb2) + liqDistribCoef) * res.frictionFactor * Liquid.rho * pow(res.fluidMeanVelocity, 2) / (2 * D);//4.79
         res.pressureGradient = res.pressureGradientFriction + rho_s * g;//4.31
         return res;
@@ -234,10 +232,10 @@ namespace flowmaps
         double TInflow)
     {
         Result res;
-        double Lb, Vm, Ap, lambda_L, Ngv, Ngvstr, Nlv, Ngvtrm;
+        double Lb, Ap, lambda_L, Ngv, Ngvstr, Nlv, Ngvtrm;
         Ap = PI * D * D / 4;
-        Vm = (Liquid.q + Gas.q) / Ap;
-        Lb = 1.071 - 0.2218 * pow(Vm / 0.3048, 2) * 0.3048 / D;//4.59
+        res.fluidMeanVelocity = (Liquid.q + Gas.q) / Ap;
+        Lb = 1.071 - 0.2218 * pow(res.fluidMeanVelocity / 0.3048, 2) * 0.3048 / D;//4.59
         if (Lb < 0.13)
         {
             Lb = 0.13;
@@ -277,5 +275,17 @@ namespace flowmaps
 
 
         return res;
+    }
+
+    Result FlowMapOrkizhevskiy::methodMursh(
+        const PhaseInfo& Liquid,
+        const PhaseInfo& Gas,
+        const PhaseInteract& PhaseInteract,
+        double D,
+        double Roughness,
+        double Angle,
+        double PInflow,
+        double TInflow)
+    {
     }
 } // namespace flowmaps

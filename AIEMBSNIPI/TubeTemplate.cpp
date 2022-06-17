@@ -8,7 +8,6 @@ using namespace flowmaps;
 
 int main()
 {
-    std::cout << "Hello World! I believe that our proect wil work\n";
     PhaseInfo Liquid;
     PhaseInfo Gas;
     double Bo, Bg, Rs, D, qo, qw_ny, qo_ny, qg_ny, fo, fw, Bw, qw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
