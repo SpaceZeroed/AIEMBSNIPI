@@ -14,20 +14,15 @@ namespace flowmaps
         PhaseInteract phaseInteract;
         MainFase mainFase;
         void setLiquid(double qo_ny, double qw_ny, double Bo, double Bw, double mu_o, double mu_w, double rho_o, double rho_w);
-        void setGas(double qg_ny, double qo_ny, double qw_ny, double mu_g, double Rs, double Rsw, double Bg, double rho_g); 
+        void setGas(double qg_ny, double qo_ny, double qw_ny, double mu_g, double Rs, double Rsw, double Bg, double rho_g);
         void setPhaseInteract(double SurfaceTension);
-        void defineTypeOfFlow();
-        
-        
-        Result calc(
+        void defineTypeOfFlow();//   
 
+        Result calc(
             double D,
             double Roughness,
             double Angle,
             double PInflow,
-            double TInflow,
-            double mu_o,
-            double fw) override;
-
+            double TInflow) override;
     };
 } // namespace flowmaps

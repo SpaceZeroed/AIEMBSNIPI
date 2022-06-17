@@ -49,8 +49,8 @@ int main()
 
  
     // реализация
-    FlowMapOrkizhevskiy myex = FlowMapOrkizhevskiy();
-    grad = myex.calc(Liquid, Gas, PhaseInteract, D, 0.000018288, 90, 117.13 * 100000, 82);
+
+    grad = flow.calc(D, 0.000018288, 90, 117.13 * 100000, 82);
     std::cout << grad.pressureGradient << "\n";
    
 
