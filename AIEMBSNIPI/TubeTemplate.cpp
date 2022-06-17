@@ -4,7 +4,7 @@
 #include <iostream>
 #include "FlowMaps.h"
 #include "FLowMapOrk.h"
-#include "Pressure.h"
+
 using namespace flowmaps;
 
 int main()
@@ -70,8 +70,7 @@ int main()
     FlowMapOrkizhevskiy myex = FlowMapOrkizhevskiy();
     grad = myex.calc(Liquid, Gas, PhaseInteract, D, 0.000018288, 90, 117.13 * 100000, 82, mu_o, fw);
     std::cout << grad.pressureGradient << "\n";
-    Pressure Temp;
-    std::cout << Temp.answer() << "\n";
+   
 
 }
 

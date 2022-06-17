@@ -140,13 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FlowMapOrk.cpp" />
-    <ClCompile Include="Pressure.cpp" />
     <ClCompile Include="TubeTemplate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FlowMapOrk.h" />
     <ClInclude Include="FlowMaps.h" />
-    <ClInclude Include="Pressure.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
