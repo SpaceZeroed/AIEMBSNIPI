@@ -46,7 +46,6 @@ int main()
     flow.setGas(qg_ny, qo_ny, qw_ny, mu_g, Rs, Rsw, Bg, rho_g);
     flow.setPhaseInteract(SurfaceTension);
 
- 
     // реализация
     grad = flow.calc(D, 0.000018288, 90, 117.13 * 100000, 82);
     std::cout << grad.pressureGradient << "\n";

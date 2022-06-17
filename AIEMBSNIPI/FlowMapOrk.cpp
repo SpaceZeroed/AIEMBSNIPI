@@ -315,7 +315,6 @@ namespace flowmaps
             std::cout << "EmulsionMode\n";
         }
 
-
         return res;
     }
 } // namespace flowmaps
