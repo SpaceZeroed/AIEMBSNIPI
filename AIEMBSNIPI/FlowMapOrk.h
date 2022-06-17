@@ -18,7 +18,9 @@ namespace flowmaps
             double Roughness,
             double Angle,
             double PInflow,
-            double TInflow) override;
+            double TInflow,
+            double mu_o,
+            double fw) override;
 
     };
 } // namespace flowmaps

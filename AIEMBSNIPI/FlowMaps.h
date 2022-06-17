@@ -21,6 +21,11 @@ namespace flowmaps
         Unknown
     };
 
+    enum class MainFase 
+    {
+        Water,
+        Oil
+    };
 
 
     struct PhaseInfo
@@ -114,7 +119,9 @@ namespace flowmaps
             double Roughness,
             double Angle,
             double PInflow,
-            double TInflow) = 0;
+            double TInflow,
+            double mu_o,
+            double fw) = 0;
         //virtual void setUseSmoothing(bool Value) = 0;
     };
     using FlowMapLiquidGasPtr = std::shared_ptr<IFlowMapLiquidGas>;
