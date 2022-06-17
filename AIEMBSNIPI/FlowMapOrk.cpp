@@ -57,8 +57,7 @@ namespace flowmaps
         double Angle,
         double PInflow,
         double TInflow,
-        double mu_o,
-        double fw
+        MainFase mainFase
         )
     {
         Result res;
@@ -91,8 +90,8 @@ namespace flowmaps
             Re_B = Liquid.rho * Vb2 * D / Liquid.mu;//4.66
         } while (abs(Vb1 - Vb2) / Vb1 > 0.05);
 
-        MainFase MF = DefineMainFase(mu_o, fw);
-        if (MF == MainFase::Oil)
+        
+        if (mainFase == MainFase::Oil)
         {
             if (res.fluidMeanVelocity < 3)//liqDistribCoef = 
             {
@@ -104,7 +103,7 @@ namespace flowmaps
                 liqDistribCoef = 0.0274 * log10(Liquid.mu + 1) / pow(D / 0.3048, 1.371) + 0.161 + 0.569 * log10(D / 0.3048) + X;//4.75
             }
         }
-        else if (MF == MainFase::Water)
+        else if (mainFase == MainFase::Water)
         {
             if (res.fluidMeanVelocity < 3)//liqDistribCoef = 
             {
@@ -196,13 +195,12 @@ namespace flowmaps
         double Angle,
         double PInflow,
         double TInflow,
-        double mu_o,
-        double fw)
+        MainFase mainFase)
     {
         Result resCork, resEmul, res;
         double Ngvstr, Ngvtrm, Ap, Ngv, Nlv, A;
         Ap = PI * D * D / 4;
-        resCork = CorkMode(Liquid, Gas, PhaseInteract, D, Roughness, Angle, PInflow, TInflow, mu_o,fw);
+        resCork = CorkMode(Liquid, Gas, PhaseInteract, D, Roughness, Angle, PInflow, TInflow, mainFase);
         resEmul = EmulsionMode(Liquid, Gas, PhaseInteract, D, Roughness, Angle, PInflow, TInflow);
         Ngv = (Gas.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1 / 4);//4.4
         Nlv = (Liquid.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1 / 4);//4.3
@@ -279,6 +277,7 @@ namespace flowmaps
         {
             Lb = 0.13;
         }
+        MainFase mainFase = DefineMainFase(mu_o, fw);
         lambda_L = Liquid.q / (Liquid.q + Gas.q);//3.8
 
         Ngv = (Gas.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1 / 4);//4.4
@@ -294,14 +293,14 @@ namespace flowmaps
         }
         else if (Ngv < Ngvstr)
         {
-            res = CorkMode(Liquid, Gas, PhaseInteract, D, Roughness, Angle, PInflow, TInflow, mu_o, fw);
+            res = CorkMode(Liquid, Gas, PhaseInteract, D, Roughness, Angle, PInflow, TInflow, mainFase);
             res.flowPattern = FlowPattern::CorkMode;
             std::cout << "CorkMode\n";
         }
 
         else if (Ngvstr < Ngv && Ngv < Ngvtrm)
         {
-            res = TransitionalMode(Liquid, Gas, PhaseInteract, D, Roughness, Angle, PInflow, TInflow, mu_o, fw);
+            res = TransitionalMode(Liquid, Gas, PhaseInteract, D, Roughness, Angle, PInflow, TInflow, mainFase);
             res.flowPattern = FlowPattern::TransitionalMode;
             std::cout << "TransitionalMode\n";
         }
