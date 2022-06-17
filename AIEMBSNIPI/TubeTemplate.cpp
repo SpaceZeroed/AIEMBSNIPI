@@ -50,6 +50,7 @@ int main()
     Liquid.mu = mu_o * fo + mu_w * fw;
     Liquid.rho = rho_o * fo + rho_w * fw;
     Liquid.rho_sc = Liquid.rho;
+    
 
     //работаем с газом 
     qg_ny = 283000.0 / 86400;
@@ -66,7 +67,7 @@ int main()
 
     // реализация
     FlowMapOrkizhevskiy myex = FlowMapOrkizhevskiy();
-    grad = myex.calc(Liquid, Gas, PhaseInteract, D, 0.000018288, 90, 117.13 * 100000, 82);
+    grad = myex.calc(Liquid, Gas, PhaseInteract, D, 0.000018288, 90, 117.13 * 100000, 82, mu_o, fw);
     std::cout << grad.pressureGradient << "\n";
 
 }
