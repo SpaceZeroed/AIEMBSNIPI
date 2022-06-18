@@ -168,6 +168,20 @@ namespace flowmaps
         return res;
     }
 
+    double FlowMapOrkizhevskiy::MethodMarch(double Length, double D, double Roughness, double Angle, double PInflow, double TInflow)
+    {
+        double deltaP = 0.0;
+        double pIn = PInflow;
+        for (int i = 0; i < Length; i++)
+        {
+            double difP = calc(D, Roughness, Angle, pIn, TInflow).pressureGradient;
+            pIn -= difP;
+            deltaP += difP;
+            cout << "P now " << pIn << "|| delta now = " << deltaP << "\n";
+        }
+        return deltaP;
+    }
+
     Result GreyMethod(
         const PhaseInfo& Liquid,
         const PhaseInfo& Gas,

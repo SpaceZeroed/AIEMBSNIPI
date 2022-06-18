@@ -52,5 +52,14 @@ namespace flowmaps
             double Angle,
             double PInflow,
             double TInflow);
+
+        double MethodMarch(
+            double Length,
+            double D,
+            double Roughness,
+            double Angle,
+            double PInflow,
+            double TInflow);
+        
     };
 } // namespace flowmaps

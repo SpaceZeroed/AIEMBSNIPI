@@ -50,7 +50,13 @@ int main()
 
     grad = flow.calc(D, 0.000018288, 90, 117.13 * 100000, 82);
     std::cout << grad.pressureGradient << "\n";
-   
+
+    int length;
+    
+    cout << "write the length of tube ";
+    cin >> length;
+
+    double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
 
 }
 
