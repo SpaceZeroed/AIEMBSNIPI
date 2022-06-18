@@ -25,6 +25,20 @@ namespace flowmaps
             double PInflow,
             double TInflow) override;
 
+        FlowPattern modeSelection(
+            double D,
+            double N_gv,
+            double N_Lv);
+        
+
+        void fillMap(
+
+            double D,
+            double Roughness,
+            double Angle,
+            double PInflow,
+            double TInflow);        
+
         Result BubbleMode(
             double D,
             double Roughness,

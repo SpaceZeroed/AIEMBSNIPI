@@ -321,5 +321,73 @@ namespace flowmaps
         return res;
     }
 
+    void FlowMapOrkizhevskiy::fillMap(
+        double D,
+        double Roughness,
+        double Angle,
+        double PInflow,
+        double TInflow)
+    {
+        double t, N_gv,N_Lv;
+        FlowPattern flowPattern;
+        for (N_gv = 0.5; N_gv <= 100; N_gv += 0.5)
+        {
+            for (N_Lv = 0.5; N_Lv <= 100; N_Lv += 0.5)
+            {
+                flowPattern = modeSelection(D,N_gv, N_Lv);
+            }
+        }
+        for (N_gv = 0.5; N_gv <= 100; N_gv += 0.5)
+        {
+            for (N_Lv = 0.5; N_Lv <= 100; N_Lv += 0.5)
+            {
+                flowPattern = modeSelection( D, N_gv, N_Lv);
+            }
+        }
+        //Раскрашивание в цвет в зависимости от режима
+    }
+
+    FlowPattern FlowMapOrkizhevskiy::modeSelection(
+        double D,
+        double N_gv,
+        double N_Lv
+        )
+    {
+        Result res;
+        double lambda_B, v_m, lambda_L, Ngv, Ngvstr, Nlv, Ngvtrm,t;
+        FlowPattern flowPattern;
+        t = pow(liquid.rho / (phaseInteract.lgSurfaceTension*g), 1 / 4);
+        v_m = t/ N_gv+t/ N_Lv;
+
+        lambda_B = 1.071 - 0.2218 * pow(v_m / 0.3048, 2) * 0.3048 / D;//4.59
+        if (lambda_B < 0.13)
+        {
+            lambda_B = 0.13;
+        }
+        lambda_L = N_gv / t;
+
+        Ngvstr = 50 + 36 * Nlv;//4.32b
+        Ngvtrm = 75 + 84 * pow(Nlv, 0.75);//4.32c
+       
+        if (1 - lambda_L <= lambda_B)
+        {
+            flowPattern = FlowPattern::BubbleMode;
+        }
+        else if (Ngv < Ngvstr)
+        {
+            flowPattern = FlowPattern::CorkMode;
+        }
+
+        else if (Ngvstr < Ngv && Ngv < Ngvtrm)
+        {
+            flowPattern = FlowPattern::TransitionalMode;
+        }
+        else
+        {
+            flowPattern = FlowPattern::TransitionalMode;
+        }
+
+        return flowPattern;
+    }
    
 } // namespace flowmaps
