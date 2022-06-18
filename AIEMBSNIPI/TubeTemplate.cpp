@@ -5,28 +5,36 @@
 #include "FlowMaps.h"
 #include "FLowMapOrk.h"
 #include <windows.h>
-
 using namespace flowmaps;
+bool KEY[256]; // id keyboard
+void GetKEY() // обработка клавиатуры 
+{
+    int i = 0;
+    while (i < 256)
+    {
+        if (GetAsyncKeyState(i)) KEY[i] = 1; else KEY[i] = 0;
+        i++;
+    }
+}
 
 void Map(int x, int y)
-{
+{   
+    cout << "To recreate press Enter, to quit press q"; // Заготовка для текста
     HWND hWnd = GetConsoleWindow();
     HDC hDC = GetDC(hWnd);
-    for (int i = 0; i < 2001; i++) {
+    for (int i = 0; i < 1001; i++) {
         SetPixel(hDC, x+i, y, RGB(255,255,255));
     }
     for (int i = 0; i < 201; i++) {
         SetPixel(hDC, x, y+i, RGB(255, 255, 255));
     }
     for (int i = 1; i < 201; i++) {
-        for (int j = 1; j < 2001; j++) {
+        for (int j = 1; j < 1001; j++) {
             SetPixel(hDC, x+j, y+i,RGB(j%256,i%256,j%256));
         }
     }
-   
-
+    
     ReleaseDC(hWnd, hDC);
-    //cin.get(); // перекрывает вывод, не нужно
 
 }
 
@@ -82,14 +90,26 @@ int main()
 
     double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
     
-    Sleep(5000);
+    Sleep(3000);
     system("cls");
     cin.ignore();
     HWND hwd = GetConsoleWindow();
     HDC hdc = GetDC(hwd);
     SelectObject(hdc, GetStockObject(WHITE_PEN));
-    Map(50,200);
-    Sleep(10000);
+    bool BoolKe=true; // for while
+    while (BoolKe)
+    {
+        GetKEY();
+        if (KEY[13]) // enter
+        {
+           Map(50, 200);
+        }
+        if (KEY[81]) // q
+        {
+            BoolKe = false;
+        }
+        Sleep(500);
+    }
     // для рисования 
     return 0;
 
