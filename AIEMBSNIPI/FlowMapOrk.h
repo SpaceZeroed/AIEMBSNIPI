@@ -24,5 +24,33 @@ namespace flowmaps
             double Angle,
             double PInflow,
             double TInflow) override;
+
+        Result BubbleMode(
+            double D,
+            double Roughness,
+            double Angle,
+            double PInflow,
+            double TInflow);
+
+        Result CorkMode(
+            double D,
+            double Roughness,
+            double Angle,
+            double PInflow,
+            double TInflow);
+
+        Result EmulsionMode(
+            double D,
+            double Roughness,
+            double Angle,
+            double PInflow,
+            double TInflow);
+
+        Result TransitionalMode(
+            double D,
+            double Roughness,
+            double Angle,
+            double PInflow,
+            double TInflow);
     };
 } // namespace flowmaps
