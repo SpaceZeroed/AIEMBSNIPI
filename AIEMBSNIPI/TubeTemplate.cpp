@@ -4,8 +4,14 @@
 #include <iostream>
 #include "FlowMaps.h"
 #include "FLowMapOrk.h"
+#include <windows.h>
 
 using namespace flowmaps;
+
+void Map(int x_1, int y_1, int x_2, int y_2, int FillColor)
+{
+
+}
 
 int main()
 {
@@ -57,6 +63,10 @@ int main()
     cin >> length;
 
     double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
+
+    HWND hWnd = GetConsoleWindow();
+    HDC hDC = GetDC(hWnd);
+
 
 }
 
