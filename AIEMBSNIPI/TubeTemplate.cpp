@@ -4,11 +4,25 @@
 #include <iostream>
 #include "FlowMaps.h"
 #include "FLowMapOrk.h"
+#include <windows.h>
 
 using namespace flowmaps;
 
-int main()
+void Map(int x, int y, COLORREF FillColor)
 {
+    HWND hWnd = GetConsoleWindow();
+    HDC hDC = GetDC(hWnd);
+
+    SetPixel(hDC, x, y, FillColor);
+
+    ReleaseDC(hWnd, hDC);
+    //cin.get(); // перекрывает вывод, не нужно
+
+}
+
+int main()
+{   
+    
     std::cout << "Hello World! I believe that our proect wil work\n";
     double Bo, Bg, Rs, D, qo, qw_ny, qo_ny, qg_ny, fo, fw, Bw, qw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
     //  начальные условия  
@@ -18,9 +32,7 @@ int main()
     qo_ny = 1590.0 / 86400;
     qg_ny = 283000.0 / 86400;
     qw_ny = 0;
-
     D = 0.1524;
-
     Bo = 1.197;
     Bg = 0.0091;
     Bw = 0.0;
@@ -52,7 +64,25 @@ int main()
 
     grad = flow.calc(D, 0.000018288, 90, 117.13 * 100000, 82);
     std::cout << grad.pressureGradient << "\n";
-   
+
+    int length;
+    
+    cout << "write the length of tube ";
+    cin >> length;
+
+    double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
+    
+    Sleep(5000);
+    system("cls");
+    cin.ignore();
+    HWND hwd = GetConsoleWindow();
+    HDC hdc = GetDC(hwd);
+    SelectObject(hdc, GetStockObject(WHITE_PEN));
+    for (int i=0; i < 30; i++) {
+        Map(20+10*i, 40+10*i, RGB(237, 134, 34));
+    }
+    // для рисования 
+
 
 }
 
