@@ -27,12 +27,12 @@ void Map(int x, int y, vector<vector<int>> Array)
 		SetPixel(hDC, x + i, y + 202, RGB(255, 255, 255));
 
 	}
-	for (int i = 0; i < 202; i++) {
+	for (int i = 0; i < 201; i++) {
 		SetPixel(hDC, x, y + i, RGB(255, 255, 255));
 		SetPixel(hDC, x + 1002, y + i, RGB(255, 255, 255));
 
 	}
-	for (int i = 0; i < 200; i++) {
+	for (int i = 0; i < 195; i++) {
 		for (int j = 0; j < 1001; j++) {
 			switch (Array[i][j])
 			{
