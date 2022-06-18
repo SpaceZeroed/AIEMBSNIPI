@@ -318,15 +318,5 @@ namespace flowmaps
         return res;
     }
 
-    Result FlowMapOrkizhevskiy::methodMursh(
-        const PhaseInfo& Liquid,
-        const PhaseInfo& Gas,
-        const PhaseInteract& PhaseInteract,
-        double D,
-        double Roughness,
-        double Angle,
-        double PInflow,
-        double TInflow)
-    {
-    }
+   
 } // namespace flowmaps
