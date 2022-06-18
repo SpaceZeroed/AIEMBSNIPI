@@ -4,69 +4,55 @@
 #include <iostream>
 #include "FlowMaps.h"
 #include "FLowMapOrk.h"
+
 using namespace flowmaps;
 
 int main()
 {
-    PhaseInfo Liquid;
-    PhaseInfo Gas;
+    std::cout << "Hello World! I believe that our proect wil work\n";
     double Bo, Bg, Rs, D, qo, qw_ny, qo_ny, qg_ny, fo, fw, Bw, qw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
     //  начальные условия  
+    FlowMapOrkizhevskiy flow;
+    Result grad;
 
-    //      
     qo_ny = 1590.0 / 86400;
-    //     
+    qg_ny = 283000.0 / 86400;
     qw_ny = 0;
-    // 
+
     D = 0.1524;
 
     Bo = 1.197;
     Bg = 0.0091;
     Bw = 0.0;
 
-    //  
+    // вязкость нефти
     mu_o = 0.00097;
-    // 
     Roughness = 0.000018288;
     PInflow = 117.13 * 100000;
     TInflow = 82;
-    qo = qo_ny * Bo;
-    qw = qw_ny * Bw;
-
     rho_o = 762.64;
     Rs = 50.6;
-
-    fo = qo / (qw + qo);
-    fw = 1 - fo;
-
     // ненужные данные   
     Rsw = 0;
     rho_w = 1000;
     mu_w = 1;
-
-    //работа с жидкостью
-    Liquid.q = qo + qw;
-    Liquid.mu = mu_o * fo + mu_w * fw;
-    Liquid.rho = rho_o * fo + rho_w * fw;
-    Liquid.rho_sc = Liquid.rho;
-
-    //работаем с газом 
-    qg_ny = 283000.0 / 86400;
-    Gas.mu = 0.000016;
-    Gas.q = (qg_ny - qo_ny * Rs - qw_ny * Rsw) * Bg;
-    Gas.rho = 94.19;
-    Gas.rho_sc = Gas.rho;
+    double mu_g = 0.000016; 
+    double rho_g = 94.19;
     Angle = 90;
-
     //работа с взаимодействием фаз 
-    PhaseInteract PhaseInteract;
-    PhaseInteract.lgSurfaceTension = 0.00841;
-    Result grad;
+    double SurfaceTension = 0.0084;
 
+    //
+    flow.setLiquid(qo_ny, qw_ny, Bo, Bw, mu_o, mu_w, rho_o, rho_w);
+    flow.setGas(qg_ny, qo_ny, qw_ny, mu_g, Rs, Rsw, Bg, rho_g);
+    flow.setPhaseInteract(SurfaceTension);
+
+ 
     // реализация
-    FlowMapOrkizhevskiy myex = FlowMapOrkizhevskiy();
-    grad = myex.calc(Liquid, Gas, PhaseInteract, D, 0.000018288, 90, 117.13 * 100000, 82);
+
+    grad = flow.calc(D, 0.000018288, 90, 117.13 * 100000, 82);
     std::cout << grad.pressureGradient << "\n";
+   
 
 }
 
