@@ -8,13 +8,27 @@
 
 using namespace flowmaps;
 
-void Map(int x_1, int y_1, int x_2, int y_2, int FillColor)
+void Map(int x, int y, COLORREF FillColor)
 {
+    HWND hWnd = GetConsoleWindow();
+    HDC hDC = GetDC(hWnd);
+
+    SetPixel(hDC, x, y, FillColor);
+
+    ReleaseDC(hWnd, hDC);
+    //cin.get(); // перекрывает вывод, не нужно
 
 }
 
 int main()
-{
+{   
+    HWND hwd = GetConsoleWindow();
+    HDC hdc = GetDC(hwd);
+    SelectObject(hdc, GetStockObject(WHITE_PEN));
+    for (int i=0; i < 30; i++) {
+        Map(20+10*i, 40+10*i, RGB(237, 134, 34));
+    }
+    // для рисования 
     std::cout << "Hello World! I believe that our proect wil work\n";
     double Bo, Bg, Rs, D, qo, qw_ny, qo_ny, qg_ny, fo, fw, Bw, qw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
     //  начальные условия  
