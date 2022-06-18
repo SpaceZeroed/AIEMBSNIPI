@@ -108,7 +108,7 @@ int main()
 
 	double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
 
-	Sleep(3000);
+	Sleep(1500);
 	system("cls");
 	cin.ignore();
 	vector<vector<int>> Array;
@@ -118,21 +118,21 @@ int main()
 	SelectObject(hdc, GetStockObject(WHITE_PEN));
 	bool BoolKe = true; // for while
 	cout << "To recreate press Enter, to quit press q"; // Заготовка для текста
-	//while (BoolKe)
-	//{
+	while (BoolKe)
+	{
 
-	//	GetKEY();
-	//	if (KEY[13]) // enter
-	//	{
-	//		Map(50, 200, flow,D);
-	//	}
-	//	if (KEY[81]) // q
-	//	{
-	//		BoolKe = false;
-	//	}
-	//	Sleep(500);
-	//}
-	Map(50, 200, Array);
+		GetKEY();
+		if (KEY[13]) // enter
+		{
+			Map(50, 200, Array);
+		}
+		if (KEY[81]) // q
+		{
+			BoolKe = false;
+		}
+		Sleep(500);
+	}
+	//Map(50, 200, Array);
 	// для рисования 
 	return 0;
 }

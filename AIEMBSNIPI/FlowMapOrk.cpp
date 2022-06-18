@@ -311,26 +311,26 @@ namespace flowmaps
         {
             res = BubbleMode(D, Roughness, Angle, PInflow, TInflow);
 
-            std::cout << "BubbleMode\n";
+            //std::cout << "BubbleMode\n";
         }
         else if (Ngv < Ngvstr)
         {
             res = CorkMode(D, Roughness, Angle, PInflow, TInflow);
             res.flowPattern = FlowPattern::CorkMode;
-            std::cout << "CorkMode\n";
+            //std::cout << "CorkMode\n";
         }
 
         else if (Ngvstr < Ngv && Ngv < Ngvtrm)
         {
             res = TransitionalMode(D, Roughness, Angle, PInflow, TInflow);
             res.flowPattern = FlowPattern::TransitionalMode;
-            std::cout << "TransitionalMode\n";
+            //std::cout << "TransitionalMode\n";
         }
         else
         {
             res = EmulsionMode(D, Roughness, Angle, PInflow, TInflow);
             res.flowPattern = FlowPattern::EmulsionMode;
-            std::cout << "EmulsionMode\n";
+            //std::cout << "EmulsionMode\n";
         }
 
         return res;
@@ -417,7 +417,8 @@ namespace flowmaps
         {
             lambda_B = 0.13;
         }
-        lambda_L = N_gv / t;
+        //lambda_L = N_gv / t;
+        lambda_L = N_Lv / (N_gv + N_Lv);
 
         Ngvstr = 50 + 36 * N_Lv;//4.32b
         Ngvtrm = 75 + 84 * pow(N_Lv, 0.75);//4.32c
