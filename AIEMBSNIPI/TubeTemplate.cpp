@@ -22,13 +22,7 @@ void Map(int x, int y, COLORREF FillColor)
 
 int main()
 {   
-    HWND hwd = GetConsoleWindow();
-    HDC hdc = GetDC(hwd);
-    SelectObject(hdc, GetStockObject(WHITE_PEN));
-    for (int i=0; i < 30; i++) {
-        Map(20+10*i, 40+10*i, RGB(237, 134, 34));
-    }
-    // для рисования 
+    
     std::cout << "Hello World! I believe that our proect wil work\n";
     double Bo, Bg, Rs, D, qo, qw_ny, qo_ny, qg_ny, fo, fw, Bw, qw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
     //  начальные условия  
@@ -77,9 +71,17 @@ int main()
     cin >> length;
 
     double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
-
-    HWND hWnd = GetConsoleWindow();
-    HDC hDC = GetDC(hWnd);
+    
+    Sleep(5000);
+    system("cls");
+    cin.ignore();
+    HWND hwd = GetConsoleWindow();
+    HDC hdc = GetDC(hwd);
+    SelectObject(hdc, GetStockObject(WHITE_PEN));
+    for (int i=0; i < 30; i++) {
+        Map(20+10*i, 40+10*i, RGB(237, 134, 34));
+    }
+    // для рисования 
 
 
 }
