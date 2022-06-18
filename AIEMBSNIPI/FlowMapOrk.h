@@ -13,6 +13,12 @@ namespace flowmaps
         PhaseInfo gas;
         PhaseInteract phaseInteract;
         MainFase mainFase;
+        double D;
+        double Roughness;
+        double Angle;
+        void setD(double d);
+        void setRoughness(double D);
+        void setAngle(double D);
         void setLiquid(double qo_ny, double qw_ny, double Bo, double Bw, double mu_o, double mu_w, double rho_o, double rho_w);
         void setGas(double qg_ny, double qo_ny, double qw_ny, double mu_g, double Rs, double Rsw, double Bg, double rho_g);
         void setPhaseInteract(double SurfaceTension);
