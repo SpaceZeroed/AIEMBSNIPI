@@ -8,12 +8,22 @@
 
 using namespace flowmaps;
 
-void Map(int x, int y, COLORREF FillColor)
+void Map(int x, int y)
 {
     HWND hWnd = GetConsoleWindow();
     HDC hDC = GetDC(hWnd);
-
-    SetPixel(hDC, x, y, FillColor);
+    for (int i = 0; i < 2001; i++) {
+        SetPixel(hDC, x+i, y, RGB(255,255,255));
+    }
+    for (int i = 0; i < 201; i++) {
+        SetPixel(hDC, x, y+i, RGB(255, 255, 255));
+    }
+    for (int i = 1; i < 201; i++) {
+        for (int j = 1; j < 2001; j++) {
+            SetPixel(hDC, x+j, y+i,RGB(j%256,i%256,j%256));
+        }
+    }
+   
 
     ReleaseDC(hWnd, hDC);
     //cin.get(); // перекрывает вывод, не нужно
@@ -78,11 +88,10 @@ int main()
     HWND hwd = GetConsoleWindow();
     HDC hdc = GetDC(hwd);
     SelectObject(hdc, GetStockObject(WHITE_PEN));
-    for (int i=0; i < 30; i++) {
-        Map(20+10*i, 40+10*i, RGB(237, 134, 34));
-    }
+    Map(50,200);
+    Sleep(10000);
     // для рисования 
-
+    return 0;
 
 }
 
