@@ -33,19 +33,19 @@ void Map(int x, int y, vector<vector<int>> Array)
 			switch (Array[i][j])
 			{
 			case 0:
-				SetPixel(hDC, x + j+1, y + i+1, RGB(0, 0, 255));
+				SetPixel(hDC, x + j+  1, y - i + 201, RGB(0, 0, 255)); // Пузырьковый-синий
 				break;
 			case 1:
-				SetPixel(hDC, x + j + 1, y + i + 1, RGB(0, 255, 0));
+				SetPixel(hDC, x + j + 1, y - i + 201, RGB(0, 255, 0)); // Пробковый-зеленый
 				break;
 			case 2:
-				SetPixel(hDC, x + j + 1, y + i + 1, RGB(255, 0, 0));
+				SetPixel(hDC, x + j + 1, y - i + 201, RGB(255, 0, 0)); // Переходный- красный
 				break;
 			case 3:
-				SetPixel(hDC, x + j + 1, y + i + 1, RGB(255, 255, 255));
+				SetPixel(hDC, x + j + 1, y - i + 201, RGB(255, 255, 255)); // Эмульсионный - белый
 				break;
 			case 4:
-				SetPixel(hDC, x + j + 1, y + i + 1, RGB(0, 255, 255)); // на случай ошибки
+				SetPixel(hDC, x + j + 1, y - i + 201, RGB(0, 255, 255)); // на случай ошибки
 				break;
 			}
 			
