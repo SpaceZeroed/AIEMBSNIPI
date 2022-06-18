@@ -176,9 +176,9 @@ namespace flowmaps
         {
             double difP = calc(D, Roughness, Angle, pIn, TInflow).pressureGradient;
             pIn -= difP;
-            deltaP += difP;
-            cout << "P now " << pIn << "|| delta now = " << deltaP << "\n";
+            deltaP += difP;            
         }
+        cout << "P now " << pIn << "|| delta now = " << deltaP << "\n";
         return deltaP;
     }
 
@@ -234,6 +234,21 @@ namespace flowmaps
         {
             return MainFase::Oil;
         }
+    }
+
+    void FlowMapOrkizhevskiy::setD(double d)
+    {
+        D = d;
+    }
+
+    void FlowMapOrkizhevskiy::setRoughness(double r)
+    {
+        Roughness = r;
+    }
+
+    void FlowMapOrkizhevskiy::setAngle(double An)
+    {
+        Angle = An;
     }
 
     void FlowMapOrkizhevskiy::setLiquid(double qo_ny, double qw_ny, double Bo, double Bw, double mu_o, double mu_w, double rho_o, double rho_w)
@@ -296,26 +311,26 @@ namespace flowmaps
         {
             res = BubbleMode(D, Roughness, Angle, PInflow, TInflow);
 
-            std::cout << "BubbleMode\n";
+            //std::cout << "BubbleMode\n";
         }
         else if (Ngv < Ngvstr)
         {
             res = CorkMode(D, Roughness, Angle, PInflow, TInflow);
             res.flowPattern = FlowPattern::CorkMode;
-            std::cout << "CorkMode\n";
+            //std::cout << "CorkMode\n";
         }
 
         else if (Ngvstr < Ngv && Ngv < Ngvtrm)
         {
             res = TransitionalMode(D, Roughness, Angle, PInflow, TInflow);
             res.flowPattern = FlowPattern::TransitionalMode;
-            std::cout << "TransitionalMode\n";
+            //std::cout << "TransitionalMode\n";
         }
         else
         {
             res = EmulsionMode(D, Roughness, Angle, PInflow, TInflow);
             res.flowPattern = FlowPattern::EmulsionMode;
-            std::cout << "EmulsionMode\n";
+            //std::cout << "EmulsionMode\n";
         }
 
         return res;
