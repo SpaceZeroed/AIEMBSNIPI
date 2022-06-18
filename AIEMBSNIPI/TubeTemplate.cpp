@@ -19,21 +19,25 @@ void GetKEY() // обработка клавиатуры
 
 void Map(int x, int y, vector<vector<int>> Array)
 {
-	
+
 	HWND hWnd = GetConsoleWindow();
 	HDC hDC = GetDC(hWnd);
 	for (int i = 0; i < 1001; i++) {
 		SetPixel(hDC, x + i, y, RGB(255, 255, 255));
+		SetPixel(hDC, x + i, y + 202, RGB(255, 255, 255));
+
 	}
-	for (int i = 0; i < 200; i++) {
+	for (int i = 0; i < 202; i++) {
 		SetPixel(hDC, x, y + i, RGB(255, 255, 255));
+		SetPixel(hDC, x + 1002, y + i, RGB(255, 255, 255));
+
 	}
 	for (int i = 0; i < 200; i++) {
 		for (int j = 0; j < 1001; j++) {
 			switch (Array[i][j])
 			{
 			case 0:
-				SetPixel(hDC, x + j+  1, y - i + 201, RGB(0, 0, 255)); // Пузырьковый-синий
+				SetPixel(hDC, x + j + 1, y - i + 201, RGB(0, 0, 255)); // Пузырьковый-синий
 				break;
 			case 1:
 				SetPixel(hDC, x + j + 1, y - i + 201, RGB(0, 255, 0)); // Пробковый-зеленый
@@ -48,7 +52,7 @@ void Map(int x, int y, vector<vector<int>> Array)
 				SetPixel(hDC, x + j + 1, y - i + 201, RGB(0, 255, 255)); // на случай ошибки
 				break;
 			}
-			
+
 		}
 	}
 
@@ -136,13 +140,13 @@ int main()
 	// для рисования 
 	return 0;
 }
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
