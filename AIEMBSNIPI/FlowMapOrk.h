@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FlowMaps.h"
+#include <vector>
 
 namespace flowmaps
 {
@@ -37,7 +38,7 @@ namespace flowmaps
             double N_Lv);
         
 
-        void fillMap(
+            std::vector<std::vector<int>> fillMap(
 
             double D,
             double Roughness,

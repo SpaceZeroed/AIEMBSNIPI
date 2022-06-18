@@ -311,54 +311,92 @@ namespace flowmaps
         {
             res = BubbleMode(D, Roughness, Angle, PInflow, TInflow);
 
-            //std::cout << "BubbleMode\n";
+            std::cout << "BubbleMode\n";
         }
         else if (Ngv < Ngvstr)
         {
             res = CorkMode(D, Roughness, Angle, PInflow, TInflow);
             res.flowPattern = FlowPattern::CorkMode;
-            //std::cout << "CorkMode\n";
+            std::cout << "CorkMode\n";
         }
 
         else if (Ngvstr < Ngv && Ngv < Ngvtrm)
         {
             res = TransitionalMode(D, Roughness, Angle, PInflow, TInflow);
             res.flowPattern = FlowPattern::TransitionalMode;
-            //std::cout << "TransitionalMode\n";
+            std::cout << "TransitionalMode\n";
         }
         else
         {
             res = EmulsionMode(D, Roughness, Angle, PInflow, TInflow);
             res.flowPattern = FlowPattern::EmulsionMode;
-            //std::cout << "EmulsionMode\n";
+            std::cout << "EmulsionMode\n";
         }
 
         return res;
     }
 
-    void FlowMapOrkizhevskiy::fillMap(
+        vector<vector<int>>  FlowMapOrkizhevskiy::fillMap(
         double D,
         double Roughness,
         double Angle,
         double PInflow,
         double TInflow)
     {
+        std::vector<std::vector<int>> Array;
         double t, N_gv,N_Lv;
         FlowPattern flowPattern;
-        for (N_gv = 0.5; N_gv <= 100; N_gv += 0.5)
+        for (N_Lv = 0.5; N_Lv <= 100; N_Lv += 0.5) // Ngv по х, а Nlv по у
         {
-            for (N_Lv = 0.5; N_Lv <= 100; N_Lv += 0.5)
+            std::vector<int> Temp;
+            for (N_gv = 0.5; N_gv <= 100; N_gv += 0.5) 
             {
-                flowPattern = modeSelection(D,N_gv, N_Lv);
+                flowPattern = modeSelection(D, N_gv, N_Lv);
+                switch (flowPattern)
+                {
+                case flowmaps::FlowPattern::BubbleMode:
+                    Temp.push_back(0);
+                    break;
+                case flowmaps::FlowPattern::CorkMode:
+                    Temp.push_back(1);
+                    break;
+                case flowmaps::FlowPattern::TransitionalMode:
+                    Temp.push_back(2);
+                    break;
+                case flowmaps::FlowPattern::EmulsionMode:
+                    Temp.push_back(3);
+                    break;
+                default:
+                    Temp.push_back(4);
+                    break;
+                }
+               
             }
-        }
-        for (N_gv = 0.5; N_gv <= 100; N_gv += 0.5)
-        {
-            for (N_Lv = 0.5; N_Lv <= 100; N_Lv += 0.5)
+            for (N_gv = 101; N_gv <= 1000; N_gv += 1) 
             {
-                flowPattern = modeSelection( D, N_gv, N_Lv);
+                flowPattern = modeSelection(D, N_gv, N_Lv);
+                switch (flowPattern)
+                {
+                case flowmaps::FlowPattern::BubbleMode:
+                    Temp.push_back(0);
+                    break;
+                case flowmaps::FlowPattern::CorkMode:
+                    Temp.push_back(1);
+                    break;
+                case flowmaps::FlowPattern::TransitionalMode:
+                    Temp.push_back(2);
+                    break;
+                case flowmaps::FlowPattern::EmulsionMode:
+                    Temp.push_back(3);
+                    break;
+                default:
+                    Temp.push_back(4);
+                    break;
+                }
             }
+            Array.push_back(Temp);
         }
+        return Array;
         //Раскрашивание в цвет в зависимости от режима
     }
 
@@ -399,7 +437,7 @@ namespace flowmaps
         }
         else
         {
-            flowPattern = FlowPattern::TransitionalMode;
+            flowPattern = FlowPattern::EmulsionMode;
         }
 
         return flowPattern;
