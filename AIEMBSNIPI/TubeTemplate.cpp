@@ -5,6 +5,8 @@
 #include "FlowMaps.h"
 #include "FLowMapOrk.h"
 #include <windows.h>
+#include <conio.h>
+#include <iostream>
 #include "MenuDraw.h"
 #include "MenuFunctions.h"
 using namespace flowmaps;
@@ -12,6 +14,7 @@ extern CONSOLE_SCREEN_BUFFER_INFO csbInfo; //информация о
 // консольном окне в структуре csbInfo
 extern SMALL_RECT consolRect; //координаты углов консоли
 extern WORD woкkWindowAttributes; //атрибуты рабочей
+extern HANDLE hStdOut;
 //области консоли
 bool KEY[256]; // id keyboard
 // обработка клавиатуры 
@@ -65,9 +68,9 @@ int main()
 	//system("mode con cols=160 lines=40"); // размер окна. Вроде 1600 на 400 пикселей
 	SetConsoleTitle(L"Pressure calculation"); // заголовок окна
 	setlocale(LC_CTYPE, "rus"); // вызов функции настройки национальных параметров
-	HWND hwd = GetConsoleWindow();
-	HDC hdc = GetDC(hwd);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	//HWND hwd = GetConsoleWindow();
+	//HDC hdc = GetDC(hwd);
+	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	GetConsoleScreenBufferInfo(hStdOut, &csbInfo);
 	//SetConsoleTextAttribute(hStdOut, FOREGROUND_RED |
 	//	FOREGROUND_GREEN /*| FOREGROUND_INTENSITY*/); // цвет текста
