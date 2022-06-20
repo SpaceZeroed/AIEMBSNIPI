@@ -81,6 +81,13 @@ namespace flowmaps
             double Angle,
             double PInflow,
             double TInflow);
+
+        Result GreyMethod(
+            double D,
+            double Roughness,
+            double Angle,
+            double PInflow,
+            double TInflow);
         
     };
 } // namespace flowmaps
