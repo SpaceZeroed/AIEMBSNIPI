@@ -28,10 +28,10 @@ WORD activeItemAttributes = 160; // атрибуты цвета активного
 // Изменяемые элементы меню
 enum menuitems { MNUFILE, MNUDO, MNUCLEAR, MNUEXIT };
 extern const int numMenu = 4; //количество пунктов меню
-char temp1[10] ="Simple";
-char temp2[10] = "Marsh";
-char temp3[10] = "Map";
-char temp4[10] = "Exit";
+char temp1[10] ="Simple  ";
+char temp2[10] = "Marsh  ";
+char temp3[10] = "Map  ";
+char temp4[10] = "Exit  ";
 ITEM menu[numMenu] = { //положение (x,y), заголовок,
 // указатель на функцию
 { 1, 0, temp1, File},

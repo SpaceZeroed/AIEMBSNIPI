@@ -62,7 +62,7 @@ void Map(int x, int y, vector<vector<int>> Array)
 
 int main()
 {
-	system("mode con cols=160 lines=40"); // размер окна. Вроде 1600 на 400 пикселей
+	//system("mode con cols=160 lines=40"); // размер окна. Вроде 1600 на 400 пикселей
 	SetConsoleTitle(L"Pressure calculation"); // заголовок окна
 	setlocale(LC_CTYPE, "rus"); // вызов функции настройки национальных параметров
 	HWND hwd = GetConsoleWindow();
@@ -73,8 +73,8 @@ int main()
 	//	FOREGROUND_GREEN /*| FOREGROUND_INTENSITY*/); // цвет текста
 	consolRect = csbInfo.srWindow; //координаты углов консоли
 	SetConsoleTextAttribute(hStdOut, woкkWindowAttributes);
-	Sleep(1000);
-	//system("CLS"); // установка атрибутов цвета рабочей области
+	//Sleep(1000);
+	system("CLS"); // установка атрибутов цвета рабочей области
 	DrawMenu(); // рисуем меню в верхней строке консоли
 	std::cout << "Hello World! I believe that our proect wil work\n";
 	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
