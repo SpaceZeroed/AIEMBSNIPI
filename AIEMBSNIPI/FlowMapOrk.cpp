@@ -182,10 +182,7 @@ namespace flowmaps
         return deltaP;
     }
 
-    Result GreyMethod(
-        const PhaseInfo& Liquid,
-        const PhaseInfo& Gas,
-        const PhaseInteract& PhaseInteract,
+    Result FlowMapOrkizhevskiy::GreyMethod(
         double D,
         double Roughness,
         double Angle,
@@ -195,18 +192,18 @@ namespace flowmaps
         Result res;
         double R, Ap, Vsg, Vsl, rho_n, lambda_L, N_v, N_D, B, HL, rho_s, epsilon_palka, epsilon, Ed;
         Ap = PI * D * D / 4;
-        Vsg = Gas.q / Ap; //3.11
-        Vsl = Liquid.q / Ap;
-        res.fluidMeanVelocity = (Liquid.q + Gas.q) / Ap;
+        Vsg = gas.q / Ap; //3.11
+        Vsl = liquid.q / Ap;
+        res.fluidMeanVelocity = (liquid.q + gas.q) / Ap;
         R = Vsl / Vsg;//4.14
-        lambda_L = Liquid.q / (Liquid.q + Gas.q);//3.8
-        rho_n = lambda_L * Liquid.rho + Gas.rho * (1 - lambda_L);//3.23
-        N_v = (pow(rho_n, 2) * pow(res.fluidMeanVelocity, 4)) / (g * PhaseInteract.lgSurfaceTension * (Liquid.rho - Gas.rho));//4.12
-        N_D = g * (Liquid.rho - Gas.rho) * pow(D, 2) / PhaseInteract.lgSurfaceTension;//4.13
+        lambda_L = liquid.q / (liquid.q + gas.q);//3.8
+        rho_n = lambda_L * liquid.rho + gas.rho * (1 - lambda_L);//3.23
+        N_v = (pow(rho_n, 2) * pow(res.fluidMeanVelocity, 4)) / (g * phaseInteract.lgSurfaceTension * (liquid.rho - gas.rho));//4.12
+        N_D = g * (liquid.rho - gas.rho) * pow(D, 2) / phaseInteract.lgSurfaceTension;//4.13
         B = 0.0814 * (1 - 0.0554 * log(1 + 730 * R / (R + 1)));//4.16
         HL = 1 - (1 - exp(-2.314 * (N_v * pow(1 + 205 / N_D, B)))) / (R + 1);//4.15
-        rho_s = Liquid.rho * HL + Gas.rho * (1 - HL);//3.22
-        epsilon_palka = 28.5 * PhaseInteract.lgSurfaceTension / (rho_n * pow(res.fluidMeanVelocity, 2));//4.18
+        rho_s = liquid.rho * HL + gas.rho * (1 - HL);//3.22
+        epsilon_palka = 28.5 * phaseInteract.lgSurfaceTension / (rho_n * pow(res.fluidMeanVelocity, 2));//4.18
         if (R >= 0.007)
         {
             epsilon = epsilon_palka;
