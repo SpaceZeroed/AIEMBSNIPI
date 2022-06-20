@@ -347,7 +347,7 @@ namespace flowmaps
         double t, N_gv,N_Lv;
         FlowPattern flowPattern;
         t = pow(liquid.rho / (phaseInteract.lgSurfaceTension * g), 1. / 4);
-        cout << t << "\n";
+        //cout << t << "\n"; //debug?
         for (N_Lv = 0.5; N_Lv <= 100; N_Lv += 0.1) // Ngv по х, а Nlv по у
         {
             std::vector<int> Temp;
