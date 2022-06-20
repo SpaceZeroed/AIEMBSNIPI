@@ -369,7 +369,7 @@ namespace flowmaps
         )
     {
         Result res;
-        double lambda_B, v_m, lambda_L, N_gv, Ngvstr, Nlv, Ngvtrm,t;
+        double lambda_B, v_m, lambda_L, Ngv, Ngvstr, Nlv, Ngvtrm,t;
         FlowPattern flowPattern;
         t = pow(liquid.rho / (phaseInteract.lgSurfaceTension*g), 1 / 4);
         v_m = t/ N_gv + t/ N_Lv;
@@ -381,8 +381,8 @@ namespace flowmaps
         }
         lambda_L = N_gv / t;
 
-        Ngvstr = 50 + 36 * Nlv;//4.32b
-        Ngvtrm = 75 + 84 * pow(Nlv, 0.75);//4.32c
+        Ngvstr = 50 + 36 * N_Lv;//4.32b
+        Ngvtrm = 75 + 84 * pow(N_Lv, 0.75);//4.32c
        
         if (1 - lambda_L <= lambda_B)
         {
