@@ -5,7 +5,14 @@
 #include "FlowMaps.h"
 #include "FLowMapOrk.h"
 #include <windows.h>
+#include "MenuDraw.h"
+#include "MenuFunctions.h"
 using namespace flowmaps;
+extern CONSOLE_SCREEN_BUFFER_INFO csbInfo; //информация о
+// консольном окне в структуре csbInfo
+extern SMALL_RECT consolRect; //координаты углов консоли
+extern WORD woкkWindowAttributes; //атрибуты рабочей
+//области консоли
 bool KEY[256]; // id keyboard
 // обработка клавиатуры 
 void GetKEY() 
@@ -57,11 +64,18 @@ int main()
 {
 	system("mode con cols=160 lines=40"); // размер окна. Вроде 1600 на 400 пикселей
 	SetConsoleTitle(L"Pressure calculation"); // заголовок окна
+	setlocale(LC_CTYPE, "rus"); // вызов функции настройки национальных параметров
 	HWND hwd = GetConsoleWindow();
 	HDC hdc = GetDC(hwd);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdOut, FOREGROUND_RED |
-		FOREGROUND_GREEN /*| FOREGROUND_INTENSITY*/); // цвет текста
+	GetConsoleScreenBufferInfo(hStdOut, &csbInfo);
+	//SetConsoleTextAttribute(hStdOut, FOREGROUND_RED |
+	//	FOREGROUND_GREEN /*| FOREGROUND_INTENSITY*/); // цвет текста
+	consolRect = csbInfo.srWindow; //координаты углов консоли
+	SetConsoleTextAttribute(hStdOut, woкkWindowAttributes);
+	Sleep(1000);
+	//system("CLS"); // установка атрибутов цвета рабочей области
+	DrawMenu(); // рисуем меню в верхней строке консоли
 	std::cout << "Hello World! I believe that our proect wil work\n";
 	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
 	//  начальные условия  
@@ -101,44 +115,44 @@ int main()
 
 	// реализация
 
-	grad = flow.calc(D, 0.000018288, 90, 117.13 * 100000, 82);
-	std::cout << grad.pressureGradient << "\n";
+	//grad = flow.calc(D, 0.000018288, 90, 117.13 * 100000, 82);
+	//std::cout << grad.pressureGradient << "\n";
 
-	int length;
+	//int length;
 
-	cout << "write the length of tube ";
-	cin >> length;
+	//cout << "write the length of tube ";
+	//cin >> length;
 
-	double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
+	//double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
 
-	Sleep(1500);
-	system("cls");
-	
-	cin.ignore();
-	vector<vector<int>> Array;
-	Array = flow.fillMap(D, 0.000018288, 90, 117.13 * 100000, 82);
-	
-	
-	//SelectObject(hdc, GetStockObject(WHITE_PEN)); // вроде не нужно
-	bool BoolKe = true; // for while
-	cout << "To recreate press Enter, to quit press q"; // Заготовка для текста
-	char str[] = "Test";
-	while (BoolKe) // перерисовка 
-	{
+	//Sleep(1500);
+	//system("cls");
+	//
+	//cin.ignore();
+	//vector<vector<int>> Array;
+	//Array = flow.fillMap(D, 0.000018288, 90, 117.13 * 100000, 82);
+	//
+	//
+	////SelectObject(hdc, GetStockObject(WHITE_PEN)); // вроде не нужно
+	//bool BoolKe = true; // for while
+	//cout << "To recreate press Enter, to quit press q"; // Заготовка для текста
+	//char str[] = "Test";
+	//while (BoolKe) // перерисовка 
+	//{
 
-		GetKEY();
-		if (KEY[13]) // enter
-		{
-			Map(200, 200, Array);
-			TextOutA(hdc, 360, 40, str, strlen(str));
-		}
-		if (KEY[81]) // q
-		{
-			BoolKe = false;
-		}
-		Sleep(500);
-	}
-	ReleaseDC(hwd, hdc);
+	//	GetKEY();
+	//	if (KEY[13]) // enter
+	//	{
+	//		Map(200, 200, Array);
+	//		TextOutA(hdc, 360, 40, str, strlen(str));
+	//	}
+	//	if (KEY[81]) // q
+	//	{
+	//		BoolKe = false;
+	//	}
+	//	Sleep(500);
+	//}
+	//ReleaseDC(hwd, hdc);
 	return 0;
 }
 
