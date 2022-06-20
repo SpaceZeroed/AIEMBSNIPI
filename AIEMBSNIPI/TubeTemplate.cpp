@@ -7,7 +7,8 @@
 #include <windows.h>
 using namespace flowmaps;
 bool KEY[256]; // id keyboard
-void GetKEY() // обработка клавиатуры 
+// обработка клавиатуры 
+void GetKEY() 
 {
 	int i = 0;
 	while (i < 256)
@@ -16,24 +17,16 @@ void GetKEY() // обработка клавиатуры
 		i++;
 	}
 }
-
+// Рисование карты режимов
 void Map(int x, int y, vector<vector<int>> Array)
 {
 
 	HWND hWnd = GetConsoleWindow();
 	HDC hDC = GetDC(hWnd);
-	for (int i = 0; i < 1001; i++) {
-		SetPixel(hDC, x + i, y, RGB(255, 255, 255));
-		SetPixel(hDC, x + i, y + 202, RGB(255, 255, 255));
-
-	}
-	for (int i = 0; i < 202; i++) { // тут 202
-		SetPixel(hDC, x, y + i, RGB(255, 255, 255));
-		SetPixel(hDC, x + 1002, y + i, RGB(255, 255, 255));
-
-	}
-	for (int i = 0; i < 200; i++) {
-		for (int j = 0; j < 1001; j++) {
+	RECT rct = { x,y-1,x+1102,y+203 };
+	FrameRect(hDC, &rct, CreateSolidBrush(RGB(255, 0, 0)));
+	for (int i = 0; i < 202; i++) {
+		for (int j = 0; j < 1100; j++) {
 			switch (Array[i][j])
 			{
 			case 0:
@@ -62,7 +55,13 @@ void Map(int x, int y, vector<vector<int>> Array)
 
 int main()
 {
-
+	system("mode con cols=160 lines=40"); // размер окна. Вроде 1600 на 400 пикселей
+	SetConsoleTitle(L"Pressure calculation"); // заголовок окна
+	HWND hwd = GetConsoleWindow();
+	HDC hdc = GetDC(hwd);
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdOut, FOREGROUND_RED |
+		FOREGROUND_GREEN /*| FOREGROUND_INTENSITY*/); // цвет текста
 	std::cout << "Hello World! I believe that our proect wil work\n";
 	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
 	//  начальные условия  
@@ -114,21 +113,24 @@ int main()
 
 	Sleep(1500);
 	system("cls");
+	
 	cin.ignore();
 	vector<vector<int>> Array;
 	Array = flow.fillMap(D, 0.000018288, 90, 117.13 * 100000, 82);
-	HWND hwd = GetConsoleWindow();
-	HDC hdc = GetDC(hwd);
-	SelectObject(hdc, GetStockObject(WHITE_PEN));
+	
+	
+	//SelectObject(hdc, GetStockObject(WHITE_PEN)); // вроде не нужно
 	bool BoolKe = true; // for while
 	cout << "To recreate press Enter, to quit press q"; // Заготовка для текста
-	while (BoolKe)
+	char str[] = "Test";
+	while (BoolKe) // перерисовка 
 	{
 
 		GetKEY();
 		if (KEY[13]) // enter
 		{
-			Map(50, 200, Array);
+			Map(200, 200, Array);
+			TextOutA(hdc, 360, 40, str, strlen(str));
 		}
 		if (KEY[81]) // q
 		{
@@ -136,8 +138,7 @@ int main()
 		}
 		Sleep(500);
 	}
-	//Map(50, 200, Array);
-	// для рисования 
+	ReleaseDC(hwd, hdc);
 	return 0;
 }
 
