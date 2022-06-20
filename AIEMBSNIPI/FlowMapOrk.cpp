@@ -100,7 +100,7 @@ namespace flowmaps
         double TInflow)
     {
         Result res;
-        double Ap, N_we, N_mu, Ed, Vsg, f, E_k, rho_n, rho_s;
+        double Ap, N_we, N_mu, Ed, Vsg, E_k, rho_n, rho_s;
         res.flowPattern = FlowPattern::EmulsionMode;
         Ap = PI * D * D / 4;
         Vsg = gas.q / Ap; //3.11
@@ -409,12 +409,11 @@ namespace flowmaps
         )
     {
         Result res;
-        double lambda_B, v_m, lambda_L, Ngv, Ngvstr, Nlv, Ngvtrm,t;
+        double lambda_B, v_m, lambda_L, Ngvstr, Ngvtrm,t;
         FlowPattern flowPattern;
-        t = pow(liquid.rho / (phaseInteract.lgSurfaceTension*g), 1. / 4);
-        
-        v_m = (t/N_gv + t/N_Lv);
 
+        t = pow(liquid.rho / (phaseInteract.lgSurfaceTension*g), 1 / 4);
+        v_m = t/ N_gv + t/ N_Lv;
         lambda_B = 1.071 - 0.2218 * pow(v_m / 0.3048, 2) * 0.3048 / D;//4.59
         if (lambda_B < 0.13)
         {
@@ -434,7 +433,6 @@ namespace flowmaps
         {
             flowPattern = FlowPattern::CorkMode;
         }
-
         else if (Ngvstr < N_gv && N_gv < Ngvtrm)
         {
             flowPattern = FlowPattern::TransitionalMode;

@@ -90,15 +90,12 @@ namespace flowmaps
         double frictionFactor;
         // Доля жидкости (для flow map)
         double N_l;
-        // Число Фруда
-        double N_fr;
 
         Result() :
             flowPattern(FlowPattern::Unknown),
             pressureGradient(NAN),
             liquidHoldup(NAN),
             N_l(NAN),
-            N_fr(NAN),
             Re(NAN),
             Re_L(NAN),
             Re_G(NAN)

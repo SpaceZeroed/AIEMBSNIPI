@@ -27,7 +27,7 @@ void Map(int x, int y, vector<vector<int>> Array)
 		SetPixel(hDC, x + i, y + 202, RGB(255, 255, 255));
 
 	}
-	for (int i = 0; i < 2012; i++) {
+	for (int i = 0; i < 202; i++) { // тут 202
 		SetPixel(hDC, x, y + i, RGB(255, 255, 255));
 		SetPixel(hDC, x + 1002, y + i, RGB(255, 255, 255));
 
@@ -64,7 +64,7 @@ int main()
 {
 
 	std::cout << "Hello World! I believe that our proect wil work\n";
-	double Bo, Bg, Rs, D, qo, qw_ny, qo_ny, qg_ny, fo, fw, Bw, qw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
+	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
 	//  начальные условия  
 	FlowMapOrkizhevskiy flow;
 	Result grad;
