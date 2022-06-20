@@ -336,29 +336,69 @@ namespace flowmaps
         return res;
     }
 
-    void FlowMapOrkizhevskiy::fillMap(
+        vector<vector<int>>  FlowMapOrkizhevskiy::fillMap(
         double D,
         double Roughness,
         double Angle,
         double PInflow,
         double TInflow)
     {
+        std::vector<std::vector<int>> Array;
         double t, N_gv,N_Lv;
         FlowPattern flowPattern;
-        for (N_gv = 0.5; N_gv <= 100; N_gv += 0.5)
+        t = pow(liquid.rho / (phaseInteract.lgSurfaceTension * g), 1. / 4);
+        cout << t << "\n";
+        for (N_Lv = 0.5; N_Lv <= 100; N_Lv += 0.1) // Ngv по х, а Nlv по у
         {
-            for (N_Lv = 0.5; N_Lv <= 100; N_Lv += 0.5)
+            std::vector<int> Temp;
+            for (N_gv = 0.5; N_gv <= 100; N_gv += 0.5) 
             {
-                flowPattern = modeSelection(D,N_gv, N_Lv);
+                flowPattern = modeSelection(D, N_gv, N_Lv);
+                switch (flowPattern)
+                {
+                case flowmaps::FlowPattern::BubbleMode:
+                    Temp.push_back(0);
+                    break;
+                case flowmaps::FlowPattern::CorkMode:
+                    Temp.push_back(1);
+                    break;
+                case flowmaps::FlowPattern::TransitionalMode:
+                    Temp.push_back(2);
+                    break;
+                case flowmaps::FlowPattern::EmulsionMode:
+                    Temp.push_back(3);
+                    break;
+                default:
+                    Temp.push_back(4);
+                    break;
+                }
+               
             }
-        }
-        for (N_gv = 0.5; N_gv <= 100; N_gv += 0.5)
-        {
-            for (N_Lv = 0.5; N_Lv <= 100; N_Lv += 0.5)
+            for (N_gv = 101; N_gv <= 1000; N_gv += 1) 
             {
-                flowPattern = modeSelection( D, N_gv, N_Lv);
+                flowPattern = modeSelection(D, N_gv, N_Lv);
+                switch (flowPattern)
+                {
+                case flowmaps::FlowPattern::BubbleMode:
+                    Temp.push_back(0);
+                    break;
+                case flowmaps::FlowPattern::CorkMode:
+                    Temp.push_back(1);
+                    break;
+                case flowmaps::FlowPattern::TransitionalMode:
+                    Temp.push_back(2);
+                    break;
+                case flowmaps::FlowPattern::EmulsionMode:
+                    Temp.push_back(3);
+                    break;
+                default:
+                    Temp.push_back(4);
+                    break;
+                }
             }
+            Array.push_back(Temp);
         }
+        return Array;
         //Раскрашивание в цвет в зависимости от режима
     }
 
@@ -371,15 +411,17 @@ namespace flowmaps
         Result res;
         double lambda_B, v_m, lambda_L, Ngv, Ngvstr, Nlv, Ngvtrm,t;
         FlowPattern flowPattern;
-        t = pow(liquid.rho / (phaseInteract.lgSurfaceTension*g), 1 / 4);
-        v_m = t/ N_gv + t/ N_Lv;
+        t = pow(liquid.rho / (phaseInteract.lgSurfaceTension*g), 1. / 4);
+        
+        v_m = (t/N_gv + t/N_Lv);
 
         lambda_B = 1.071 - 0.2218 * pow(v_m / 0.3048, 2) * 0.3048 / D;//4.59
         if (lambda_B < 0.13)
         {
             lambda_B = 0.13;
         }
-        lambda_L = N_gv / t;
+        //lambda_L = N_gv / t;
+        lambda_L = N_Lv / (N_gv + N_Lv);
 
         Ngvstr = 50 + 36 * N_Lv;//4.32b
         Ngvtrm = 75 + 84 * pow(N_Lv, 0.75);//4.32c
@@ -399,7 +441,7 @@ namespace flowmaps
         }
         else
         {
-            flowPattern = FlowPattern::TransitionalMode;
+            flowPattern = FlowPattern::EmulsionMode;
         }
 
         return flowPattern;
