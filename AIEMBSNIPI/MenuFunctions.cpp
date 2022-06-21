@@ -34,7 +34,7 @@ void RegimeMap(FlowMapOrkizhevskiy flow) {
 	char str5[] = "200";
 	TextOutA(hDC, 350, 405, str5, strlen(str5));
 	char str6[] = "1000";
-	TextOutA(hDC, 1150, 405, str6, strlen(str5));
+	TextOutA(hDC, 1150, 405, str6, strlen(str6));
 	char str7[] = "10";
 	TextOutA(hDC, 30, 300, str7, strlen(str7));
 	FrameRect(hDC, &rct, CreateSolidBrush(RGB(255, 0, 0)));
