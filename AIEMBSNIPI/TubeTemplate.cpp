@@ -67,17 +67,11 @@ void Map(int x, int y, vector<vector<int>> Array)
 	system("mode con cols=160 lines=40"); // размер окна. Вроде 1600 на 400 пикселей
 	SetConsoleTitle(L"Pressure calculation"); // заголовок окна
 	setlocale(LC_CTYPE, "rus"); // вызов функции настройки национальных параметров
-	//HWND hwd = GetConsoleWindow();
-	//HDC hdc = GetDC(hwd);
 	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	GetConsoleScreenBufferInfo(hStdOut, &csbInfo);
-	//SetConsoleTextAttribute(hStdOut, FOREGROUND_RED |
-	//	FOREGROUND_GREEN /*| FOREGROUND_INTENSITY*/); // цвет текста
 	consolRect = csbInfo.srWindow; //координаты углов консоли
 	SetConsoleTextAttribute(hStdOut, woкkWindowAttributes);
-	//Sleep(1000);
 	system("CLS"); // установка атрибутов цвета рабочей области
-	// рисуем меню в верхней строке консоли
 
 	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
 	//  начальные условия  
