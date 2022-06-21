@@ -26,24 +26,21 @@ WORD inactiveItemAttributes = 31; //атрибуты цвета неактивного
 WORD activeItemAttributes = 160; // атрибуты цвета активного
 // пункта меню
 // Изменяемые элементы меню
-enum menuitems { MNUFILE, MNUDO, MNUCLEAR, MNUEXIT };
-extern const int numMenu = 4; //количество пунктов меню
-char temp1[10] ="Simple  ";
-char temp2[10] = "Marsh  ";
-char temp3[10] = "Map  ";
-char temp4[10] = "Exit  ";
+enum menuitems { MNUGRAD,MNUMARSH, MNUMAP, MNUCLEAR, MNUEXIT };
+extern const int numMenu = 5; //количество пунктов меню
 ITEM menu[numMenu] = { //положение (x,y), заголовок,
 // указатель на функцию
-{ 1, 0, "  Test   ", File},
-{ 11, 0, "  Fun    ", Do},
-{ 21, 0, "  Why    ", Clear},
-{ 31, 0, "  Exit   ", Exit}
+{ 1, 0, "  Test   ", PressureGrad},
+{11,0, " Marsh  ", Marsh},
+{ 21, 0, "  Map    ", RegimeMap},
+{ 31, 0, "  Clear    ", Clear},
+{ 41, 0, "  Exit   ", Exit}
 };
 // Длина строк заголовков " Файл ", " Действие "," Очистить ",
 // " Выход " должна быть подобрана в соответствии с их
 // X - координатами в массиве menu[]
 void DrawMenu() { //Управление меню
-	menuitems sel = MNUFILE; // Номер текущего пункта меню
+	menuitems sel = MNUGRAD; // Номер текущего пункта меню
 	SetConsoleTextAttribute(hStdOut, inactiveItemAttributes);
 	string s(80, ' '); cout << s.c_str(); //залить фон строки меню
 	for (int i = 0; i < numMenu; i++) { //Напечатать заголовки
@@ -69,7 +66,7 @@ void DrawMenu() { //Управление меню
 				}
 				else {
 					itemMenu(sel, false); // сделать неактивным пункт меню
-					sel = MNUFILE; // прокрутка влево
+					sel = MNUGRAD; // прокрутка влево
 					itemMenu(sel, true); // выделить активный пункт меню
 				}
 				showCursor(false);
@@ -96,18 +93,25 @@ void DrawMenu() { //Управление меню
 				showCursor(true);
 				switch (sel)
 				{
-				case MNUFILE:
-					File();
+				case MNUGRAD:
+					PressureGrad();
+					
 					getCursorPosition(); // запомнить положение курсора
 					break;
-				case MNUDO:
-					Do();
+				case MNUMARSH:
+					
+					Marsh();
+					getCursorPosition();// запомнить положение курсора
+					break;
+				case MNUMAP:
+					
+					RegimeMap();
 					getCursorPosition(); // запомнить положение курсора
 					break;
 					
 				case MNUCLEAR:
 					Clear();
-					curspos = { 0, 1 }; // после очистки курсор
+					curspos = { 0, 2 }; // после очистки курсор
 					//в левый верхний угол консоли
 					break;
 				case MNUEXIT:
@@ -161,7 +165,7 @@ void cls(int it)
 	SetConsoleTextAttribute(hStdOut, woкkWindowAttributes);
 	if (it == 0) gotoxy(0, consolRect.Top + 1);
 	else gotoxy(0, consolRect.Top);
-	for (i = consolRect.Top; i < curspos.Y + 1; i++) // очистка от
+	for (i = consolRect.Top; i < consolRect.Bottom; i++) // очистка от
 	// первой строки до строки с курсором
 		cout << s.c_str(); // залить фон строки меню
 	gotoxy(0, 0);

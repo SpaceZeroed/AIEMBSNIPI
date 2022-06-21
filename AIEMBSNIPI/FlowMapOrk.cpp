@@ -409,7 +409,7 @@ namespace flowmaps
         double lambda_B, v_m, lambda_L, Ngvstr, Ngvtrm,t;
         FlowPattern flowPattern;
 
-        t = pow(liquid.rho / (phaseInteract.lgSurfaceTension*g), 1 / 4);
+        t = pow(liquid.rho / (phaseInteract.lgSurfaceTension*g), 1. / 4);
         v_m = t/ N_gv + t/ N_Lv;
         lambda_B = 1.071 - 0.2218 * pow(v_m / 0.3048, 2) * 0.3048 / D;//4.59
         if (lambda_B < 0.13)

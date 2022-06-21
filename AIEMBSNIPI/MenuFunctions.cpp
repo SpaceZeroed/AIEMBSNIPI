@@ -1,28 +1,108 @@
-#include <windows.h>
+п»ї#include <windows.h>
 #include <conio.h>
 #include <iostream>
 #include <clocale>
 #include "MenuDraw.h"
 #include "MenuFunctions.h"
+#include <vector>
+#include "FlowMapOrk.h"
 using namespace std;
-void File() {
-	cout << "Вы выбрали меню 'Файл'\n";
+void PressureGrad() {
+	cout << "Р’С‹ РІС‹Р±СЂР°Р»Рё РјРµРЅСЋ 'Р¤Р°Р№Р»'\n";
 }
-//Функция меню <Действие>. Заполняется кодом пользователя
-void Do() {
-	long val = 0;
-	cout << "Введите целое число: ";
-	cout << "Квадрат " << val << " равен " << val * val << "\n";
+//Р¤СѓРЅРєС†РёСЏ РјРµРЅСЋ <Р”РµР№СЃС‚РІРёРµ>. Р—Р°РїРѕР»РЅСЏРµС‚СЃСЏ РєРѕРґРѕРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+void RegimeMap() {
+	int x = 200, y = 200;
+	double D = 0.1524;
+	vector<vector<int>> Array;
+	flowmaps::FlowMapOrkizhevskiy flow;
+	Array = flow.fillMap(D, 0.000018288, 90, 117.13 * 100000, 82);
+	HWND hWnd = GetConsoleWindow();
+	HDC hDC = GetDC(hWnd);
+	RECT rct = { x,y - 1,x + 1102,y + 203 };
+	FrameRect(hDC, &rct, CreateSolidBrush(RGB(255, 0, 0)));
+	for (int i = 0; i < 202; i++) {
+		for (int j = 0; j < 1100; j++) {
+			switch (Array[i][j])
+			{
+			case 0:
+				SetPixel(hDC, x + j + 1, y - i + 201, RGB(0, 0, 255)); // РџСѓР·С‹СЂСЊРєРѕРІС‹Р№-СЃРёРЅРёР№
+				break;
+			case 1:
+				SetPixel(hDC, x + j + 1, y - i + 201, RGB(0, 255, 0)); // РџСЂРѕР±РєРѕРІС‹Р№-Р·РµР»РµРЅС‹Р№
+				break;
+			case 2:
+				SetPixel(hDC, x + j + 1, y - i + 201, RGB(255, 0, 0)); // РџРµСЂРµС…РѕРґРЅС‹Р№- РєСЂР°СЃРЅС‹Р№
+				break;
+			case 3:
+				SetPixel(hDC, x + j + 1, y - i + 201, RGB(255, 255, 255)); // Р­РјСѓР»СЊСЃРёРѕРЅРЅС‹Р№ - Р±РµР»С‹Р№
+				break;
+			case 4:
+				SetPixel(hDC, x + j + 1, y - i + 201, RGB(0, 255, 255)); // РЅР° СЃР»СѓС‡Р°Р№ РѕС€РёР±РєРё
+				break;
+			}
+
+		}
+	}
+
+	ReleaseDC(hWnd, hDC);
 }
-//Функция меню <Выход> - завершение программы
+void Marsh() {
+	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
+	int length;
+	qo_ny = 1590.0 / 86400;
+	qg_ny = 283000.0 / 86400;
+	qw_ny = 0;
+	D = 0.1524;
+	Bo = 1.197;
+	Bg = 0.0091;
+	Bw = 0.0;
+
+	// РІСЏР·РєРѕСЃС‚СЊ РЅРµС„С‚Рё
+	mu_o = 0.00097;
+	Roughness = 0.000018288;
+	PInflow = 117.13 * 100000;
+	TInflow = 82;
+	rho_o = 762.64;
+	Rs = 50.6;
+	// РЅРµРЅСѓР¶РЅС‹Рµ РґР°РЅРЅС‹Рµ   
+	Rsw = 0;
+	rho_w = 1000;
+	mu_w = 1;
+	double mu_g = 0.000016;
+	double rho_g = 94.19;
+	Angle = 90;
+	//СЂР°Р±РѕС‚Р° СЃ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµРј С„Р°Р· 
+	double SurfaceTension = 0.0084;
+
+	//
+	
+	flowmaps::FlowMapOrkizhevskiy flow;
+	flow.setLiquid(qo_ny, qw_ny, Bo, Bw, mu_o, mu_w, rho_o, rho_w);
+	flow.setGas(qg_ny, qo_ny, qw_ny, mu_g, Rs, Rsw, Bg, rho_g);
+	flow.setPhaseInteract(SurfaceTension);
+	double D = 0.1524;
+	cout << "write the length of tube ";
+	cin >> length;
+	double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
+}
+//Р¤СѓРЅРєС†РёСЏ РјРµРЅСЋ <Р’С‹С…РѕРґ> - Р·Р°РІРµСЂС€РµРЅРёРµ РїСЂРѕРіСЂР°РјРјС‹
 void Exit() {
 	int resp;
-	cout << "Вы уверены, что хотите выйти из программы? (y/n)?";
+	cout << "Р’С‹ СѓРІРµСЂРµРЅС‹, С‡С‚Рѕ С…РѕС‚РёС‚Рµ РІС‹Р№С‚Рё РёР· РїСЂРѕРіСЂР°РјРјС‹? (y/n)?";
 	resp = getchar();
 	if (resp == 'y' || resp == 'Y') { cls(1); exit(0); }
 }
-// Функция меню <Очистить>
+// Р¤СѓРЅРєС†РёСЏ РјРµРЅСЋ <РћС‡РёСЃС‚РёС‚СЊ>
 void Clear(void)
 {
 	cls();
+	HWND hWnd = GetConsoleWindow();
+	HDC hDC = GetDC(hWnd);
+	HBRUSH hBrush; //СЃРѕР·РґР°СђРј РѕР±СЉРµРєС‚-РєРёСЃС‚СЊ
+	hBrush = CreateSolidBrush(RGB(60, 119, 255)); //СЃРѕР·РґР°РµРј СЃРїР»РѕС€РЅСѓСЋ РєРёСЃС‚СЊ
+	SelectObject(hDC, hBrush); //РґРµР»Р°РµРј РєРёСЃС‚СЊ Р°РєС‚РёРІРЅРѕР№
+	const RECT  rct = { 200,199,1310,404 };
+	FillRect(hDC, &rct,hBrush);
+	SelectObject(hDC, GetStockObject(WHITE_PEN));
 }

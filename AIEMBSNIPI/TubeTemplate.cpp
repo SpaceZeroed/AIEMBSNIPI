@@ -62,10 +62,9 @@ void Map(int x, int y, vector<vector<int>> Array)
 	ReleaseDC(hWnd, hDC);
 
 }
-
-int main()
+ int main()
 {
-	//system("mode con cols=160 lines=40"); // размер окна. Вроде 1600 на 400 пикселей
+	system("mode con cols=160 lines=40"); // размер окна. Вроде 1600 на 400 пикселей
 	SetConsoleTitle(L"Pressure calculation"); // заголовок окна
 	setlocale(LC_CTYPE, "rus"); // вызов функции настройки национальных параметров
 	//HWND hwd = GetConsoleWindow();
