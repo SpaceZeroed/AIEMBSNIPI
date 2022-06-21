@@ -26,7 +26,7 @@ void RegimeMap(FlowMapOrkizhevskiy flow) {
 	char str1[] = "N_Lv";
 	TextOutA(hDC, 50, 170, str1, strlen(str1));
 	char str2[] = "N_Gv";
-	TextOutA(hDC, 1170, 400, str2, strlen(str2));
+	TextOutA(hDC, 1170, 380, str2, strlen(str2));
 	char str3[] = "10";
 	TextOutA(hDC, 70, 405, str3, strlen(str3));
 	char str4[] = "100";
