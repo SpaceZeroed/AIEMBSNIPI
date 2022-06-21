@@ -13,7 +13,7 @@ using namespace flowmaps;
 #define KEY_ARROW_RIGHT 77
 #define KEY_ARROW_LEFT 75
 #define KEY_ENTER 13
-typedef void(*FUN) (void); //Указатель на функцию void f(void)
+typedef void(*FUN) (FlowMapOrkizhevskiy); //Указатель на функцию void f(void)
 //они будут выполнять пункты меню
 typedef struct { //Структура для элемента меню
 	int x, y; //Столбец и строка консоли
@@ -115,7 +115,7 @@ void DrawMenu(FlowMapOrkizhevskiy flow) { //Управление меню
 					break;
 					
 				case MNUCLEAR:
-					Clear();
+					Clear(flow);
 					curspos = { 0, 1 }; // после очистки курсор
 					//в левый верхний угол консоли
 					break;

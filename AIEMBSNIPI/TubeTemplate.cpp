@@ -108,54 +108,13 @@ void Map(int x, int y, vector<vector<int>> Array)
 	Angle = 90;
 	////работа с взаимодействием фаз 
 	double SurfaceTension = 0.0084;
-
 	
 	flow.setLiquid(qo_ny, qw_ny, Bo, Bw, mu_o, mu_w, rho_o, rho_w);
 	flow.setGas(qg_ny, qo_ny, qw_ny, mu_g, Rs, Rsw, Bg, rho_g);
 	flow.setPhaseInteract(SurfaceTension);
 	flow.setArguments(D, 0.000018288, 90, 117.13 * 100000, 82);
 	DrawMenu(flow);
-	// реализация
-
 	
-	//std::cout << grad.pressureGradient << "\n";
-
-	//int length;
-
-	//cout << "write the length of tube ";
-	//cin >> length;
-
-	//double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
-
-
-	//Sleep(1500);
-	//system("cls");
-	//
-	//cin.ignore();
-	//vector<vector<int>> Array;
-	//Array = flow.fillMap(D, 0.000018288, 90, 117.13 * 100000, 82);
-	//
-	//
-	////SelectObject(hdc, GetStockObject(WHITE_PEN)); // вроде не нужно
-	//bool BoolKe = true; // for while
-	//cout << "To recreate press Enter, to quit press q"; // Заготовка для текста
-	//char str[] = "Test";
-	//while (BoolKe) // перерисовка 
-	//{
-
-	//	GetKEY();
-	//	if (KEY[13]) // enter
-	//	{
-	//		Map(200, 200, Array);
-	//		TextOutA(hdc, 360, 40, str, strlen(str));
-	//	}
-	//	if (KEY[81]) // q
-	//	{
-	//		BoolKe = false;
-	//	}
-	//	Sleep(500);
-	//}
-	//ReleaseDC(hwd, hdc);
 	return 0;
 }
 
