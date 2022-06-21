@@ -81,7 +81,6 @@ void Marsh() {
 	flow.setLiquid(qo_ny, qw_ny, Bo, Bw, mu_o, mu_w, rho_o, rho_w);
 	flow.setGas(qg_ny, qo_ny, qw_ny, mu_g, Rs, Rsw, Bg, rho_g);
 	flow.setPhaseInteract(SurfaceTension);
-	double D = 0.1524;
 	cout << "write the length of tube ";
 	cin >> length;
 	double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
