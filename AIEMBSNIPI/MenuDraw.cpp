@@ -47,7 +47,7 @@ ITEM menu[numMenu] = { //положение (x,y), заголовок,
 void DrawMenu(FlowMapOrkizhevskiy flow) { //”правление меню
 	menuitems sel = MNUGRAD; // Ќомер текущего пункта меню
 	SetConsoleTextAttribute(hStdOut, inactiveItemAttributes);
-	string s(80, ' '); cout << s.c_str(); //залить фон строки меню
+	string s(160, ' '); cout << s.c_str(); //залить фон строки меню
 	for (int i = 0; i < numMenu; i++) { //Ќапечатать заголовки
 	//пунктов меню
 		gotoxy(menu[i].x, menu[i].y);
