@@ -21,12 +21,24 @@
     <ClCompile Include="FlowMapOrk.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="MenuFunctions.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuDraw.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FlowMaps.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="FlowMapOrk.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuFunctions.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuDraw.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
