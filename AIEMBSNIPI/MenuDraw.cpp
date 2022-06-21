@@ -30,7 +30,7 @@ enum menuitems { MNUGRAD,MNUMARSH, MNUMAP, MNUCLEAR, MNUEXIT };
 extern const int numMenu = 5; //количество пунктов меню
 ITEM menu[numMenu] = { //положение (x,y), заголовок,
 // указатель на функцию
-{ 1, 0, "  Test   ", PressureGrad},
+{ 1, 0, "Pressure ", PressureGrad},
 {11,0, " Marsh  ", Marsh},
 { 21, 0, "  Map    ", RegimeMap},
 { 31, 0, "  Clear    ", Clear},
@@ -111,7 +111,7 @@ void DrawMenu() { //Управление меню
 					
 				case MNUCLEAR:
 					Clear();
-					curspos = { 0, 2 }; // после очистки курсор
+					curspos = { 0, 1 }; // после очистки курсор
 					//в левый верхний угол консоли
 					break;
 				case MNUEXIT:
