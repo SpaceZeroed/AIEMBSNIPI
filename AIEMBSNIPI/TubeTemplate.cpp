@@ -98,26 +98,22 @@ int main()
 	flow.setGas(qg_ny, qo_ny, qw_ny, mu_g, Rs, Rsw, Bg, rho_g);
 	flow.setPhaseInteract(SurfaceTension);
 
-
 	// реализация
-
-	grad = flow.calc(D, 0.000018288, 90, 117.13 * 100000, 82);
+	grad = flow.calc(D, Roughness, Angle, PInflow, TInflow);
 	std::cout << grad.pressureGradient << "\n";
 
 	int length;
-
 	cout << "write the length of tube ";
 	cin >> length;
 
-	double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
+	double izm = flow.MethodMarch(length, D, Roughness, Angle, PInflow, TInflow);
 
 	Sleep(1500);
 	system("cls");
 	
 	cin.ignore();
 	vector<vector<int>> Array;
-	Array = flow.fillMap(D, 0.000018288, 90, 117.13 * 100000, 82);
-	
+	Array = flow.fillMap(D, Roughness, Angle, PInflow, TInflow);
 	
 	//SelectObject(hdc, GetStockObject(WHITE_PEN)); // вроде не нужно
 	bool BoolKe = true; // for while
