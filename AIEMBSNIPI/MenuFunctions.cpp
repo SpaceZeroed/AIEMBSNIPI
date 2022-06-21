@@ -57,14 +57,14 @@ void Marsh(FlowMapOrkizhevskiy flow) {
 	double izm = flow.MethodMarch(length);
 }
 //Функция меню <Выход> - завершение программы
-void Exit() {
+void Exit(FlowMapOrkizhevskiy flow) {
 	int resp;
 	cout << "Вы уверены, что хотите выйти из программы? (y/n)?";
 	resp = getchar();
 	if (resp == 'y' || resp == 'Y') { cls(1); exit(0); }
 }
 // Функция меню <Очистить>
-void Clear(void)
+void Clear(FlowMapOrkizhevskiy flow)
 {
 	cls();
 	HWND hWnd = GetConsoleWindow();
