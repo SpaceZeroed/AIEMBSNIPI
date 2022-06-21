@@ -4,7 +4,12 @@
 #include <iostream>
 #include "MenuFunctions.h"
 #include "MenuDraw.h"
+#include "FlowMaps.h"
+#include "FLowMapOrk.h"
+
 using namespace std;
+using namespace flowmaps;
+
 #define KEY_ARROW_RIGHT 77
 #define KEY_ARROW_LEFT 75
 #define KEY_ENTER 13
@@ -30,8 +35,8 @@ enum menuitems { MNUGRAD,MNUMARSH, MNUMAP, MNUCLEAR, MNUEXIT };
 extern const int numMenu = 5; //количество пунктов меню
 ITEM menu[numMenu] = { //положение (x,y), заголовок,
 // указатель на функцию
-{ 1, 0, "Pressure ", PressureGrad},
-{11,0, " Marsh  ", Marsh},
+{ 1, 0, "Gradient", PressureGrad},
+{11,0, " Marsh   ", Marsh},
 { 21, 0, "  Map    ", RegimeMap},
 { 31, 0, "  Clear    ", Clear},
 { 41, 0, "  Exit   ", Exit}
@@ -39,7 +44,7 @@ ITEM menu[numMenu] = { //положение (x,y), заголовок,
 // Длина строк заголовков " Файл ", " Действие "," Очистить ",
 // " Выход " должна быть подобрана в соответствии с их
 // X - координатами в массиве menu[]
-void DrawMenu() { //Управление меню
+void DrawMenu(FlowMapOrkizhevskiy flow) { //Управление меню
 	menuitems sel = MNUGRAD; // Номер текущего пункта меню
 	SetConsoleTextAttribute(hStdOut, inactiveItemAttributes);
 	string s(80, ' '); cout << s.c_str(); //залить фон строки меню
@@ -94,18 +99,18 @@ void DrawMenu() { //Управление меню
 				switch (sel)
 				{
 				case MNUGRAD:
-					PressureGrad();
+					PressureGrad(flow);
 					
 					getCursorPosition(); // запомнить положение курсора
 					break;
 				case MNUMARSH:
 					
-					Marsh();
+					Marsh(flow);
 					getCursorPosition();// запомнить положение курсора
 					break;
 				case MNUMAP:
 					
-					RegimeMap();
+					RegimeMap(flow);
 					getCursorPosition(); // запомнить положение курсора
 					break;
 					

@@ -14,78 +14,45 @@ namespace flowmaps
         PhaseInfo gas;
         PhaseInteract phaseInteract;
         MainFase mainFase;
-        double D;
-        double Roughness;
-        double Angle;
+        double d;
+        double roughness;
+        double angle;
+        double pInflow;
+        double tInflow;
         void setD(double d);
         void setRoughness(double D);
         void setAngle(double D);
         void setLiquid(double qo_ny, double qw_ny, double Bo, double Bw, double mu_o, double mu_w, double rho_o, double rho_w);
         void setGas(double qg_ny, double qo_ny, double qw_ny, double mu_g, double Rs, double Rsw, double Bg, double rho_g);
         void setPhaseInteract(double SurfaceTension);
-        void defineTypeOfFlow();//   
 
-        Result calc(
+        void  setArguments(
             double D,
             double Roughness,
             double Angle,
             double PInflow,
-            double TInflow) override;
+            double TInflow) ;
+
+        Result calc() override;
 
         FlowPattern modeSelection(
-            double D,
             double N_gv,
             double N_Lv);
         
-            std::vector<std::vector<int>> fillMap(
-            double D,
-            double Roughness,
-            double Angle,
-            double PInflow,
-            double TInflow);        
+            std::vector<std::vector<int>> fillMap();        
 
-        Result BubbleMode(
-            double D,
-            double Roughness,
-            double Angle,
-            double PInflow,
-            double TInflow);
+        Result BubbleMode();
 
-        Result CorkMode(
-            double D,
-            double Roughness,
-            double Angle,
-            double PInflow,
-            double TInflow);
+        Result CorkMode();
 
-        Result EmulsionMode(
-            double D,
-            double Roughness,
-            double Angle,
-            double PInflow,
-            double TInflow);
+        Result EmulsionMode();
 
-        Result TransitionalMode(
-            double D,
-            double Roughness,
-            double Angle,
-            double PInflow,
-            double TInflow);
+        Result TransitionalMode();
 
         double MethodMarch(
-            double Length,
-            double D,
-            double Roughness,
-            double Angle,
-            double PInflow,
-            double TInflow);
+            double Length);
 
-        Result GreyMethod(
-            double D,
-            double Roughness,
-            double Angle,
-            double PInflow,
-            double TInflow);
+        Result GreyMethod();
         
     };
 } // namespace flowmaps

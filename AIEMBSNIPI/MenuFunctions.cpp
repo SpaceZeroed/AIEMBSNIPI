@@ -6,82 +6,20 @@
 #include "MenuFunctions.h"
 #include <vector>
 #include "FlowMapOrk.h"
+
 using namespace std;
-void PressureGrad() {
-	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
-	//  начальные условия  
-	flowmaps::FlowMapOrkizhevskiy flow;
-	flowmaps::Result grad;
+using namespace flowmaps;
 
-	qo_ny = 1590.0 / 86400;
-	qg_ny = 283000.0 / 86400;
-	qw_ny = 0;
-	D = 0.1524;
-	Bo = 1.197;
-	Bg = 0.0091;
-	Bw = 0.0;
-
-	//// вязкость нефти
-	mu_o = 0.00097;
-	Roughness = 0.000018288;
-	PInflow = 117.13 * 100000;
-	TInflow = 82;
-	rho_o = 762.64;
-	Rs = 50.6;
-	// ненужные данные   
-	Rsw = 0;
-	rho_w = 1000;
-	mu_w = 1;
-	double mu_g = 0.000016;
-	double rho_g = 94.19;
-	Angle = 90;
-	//работа с взаимодействием фаз 
-	double SurfaceTension = 0.0084;
-
-	//
-	flow.setLiquid(qo_ny, qw_ny, Bo, Bw, mu_o, mu_w, rho_o, rho_w);
-	flow.setGas(qg_ny, qo_ny, qw_ny, mu_g, Rs, Rsw, Bg, rho_g);
-	flow.setPhaseInteract(SurfaceTension);
-
-
-	// реализация
-
-	grad = flow.calc(D, 0.000018288, 90, 117.13 * 100000, 82);
-	std::cout << grad.pressureGradient << "\n";
+void PressureGrad( FlowMapOrkizhevskiy flow) {
+	double grad;
+	grad = flow.calc().pressureGradient;
+	std::cout << grad << "\n";
 }
 //Функция меню <Действие>. Заполняется кодом пользователя
-void RegimeMap() {
-	int x = 200, y = 200;
-	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
+void RegimeMap(FlowMapOrkizhevskiy flow) {
+	int x = 200, y = 200;	
 	vector<vector<int>> Array;
-	flowmaps::FlowMapOrkizhevskiy flow;
-	double SurfaceTension = 0.0084;
-	qo_ny = 1590.0 / 86400;
-	qg_ny = 283000.0 / 86400;
-	qw_ny = 0;
-	D = 0.1524;
-	Bo = 1.197;
-	Bg = 0.0091;
-	Bw = 0.0;
-
-	// вязкость нефти
-	mu_o = 0.00097;
-	Roughness = 0.000018288;
-	PInflow = 117.13 * 100000;
-	TInflow = 82;
-	rho_o = 762.64;
-	Rs = 50.6;
-	// ненужные данные   
-	Rsw = 0;
-	rho_w = 1000;
-	mu_w = 1;
-	double mu_g = 0.000016;
-	double rho_g = 94.19;
-	Angle = 90;
-	flow.setLiquid(qo_ny, qw_ny, Bo, Bw, mu_o, mu_w, rho_o, rho_w);
-	flow.setGas(qg_ny, qo_ny, qw_ny, mu_g, Rs, Rsw, Bg, rho_g);
-	flow.setPhaseInteract(SurfaceTension);
-	Array = flow.fillMap(D, 0.000018288, 90, 117.13 * 100000, 82);
+	Array = flow.fillMap();
 	HWND hWnd = GetConsoleWindow();
 	HDC hDC = GetDC(hWnd);
 	RECT rct = { x,y - 1,x + 1102,y + 203 };
@@ -112,43 +50,11 @@ void RegimeMap() {
 
 	ReleaseDC(hWnd, hDC);
 }
-void Marsh() {
-	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
-	int length;
-	qo_ny = 1590.0 / 86400;
-	qg_ny = 283000.0 / 86400;
-	qw_ny = 0;
-	D = 0.1524;
-	Bo = 1.197;
-	Bg = 0.0091;
-	Bw = 0.0;
-
-	// вязкость нефти
-	mu_o = 0.00097;
-	Roughness = 0.000018288;
-	PInflow = 117.13 * 100000;
-	TInflow = 82;
-	rho_o = 762.64;
-	Rs = 50.6;
-	// ненужные данные   
-	Rsw = 0;
-	rho_w = 1000;
-	mu_w = 1;
-	double mu_g = 0.000016;
-	double rho_g = 94.19;
-	Angle = 90;
-	//работа с взаимодействием фаз 
-	double SurfaceTension = 0.0084;
-
-	//
-	
-	flowmaps::FlowMapOrkizhevskiy flow;
-	flow.setLiquid(qo_ny, qw_ny, Bo, Bw, mu_o, mu_w, rho_o, rho_w);
-	flow.setGas(qg_ny, qo_ny, qw_ny, mu_g, Rs, Rsw, Bg, rho_g);
-	flow.setPhaseInteract(SurfaceTension);
+void Marsh(FlowMapOrkizhevskiy flow) {
+	double length;
 	cout << "write the length of tube ";
 	cin >> length;
-	double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
+	double izm = flow.MethodMarch(length);
 }
 //Функция меню <Выход> - завершение программы
 void Exit() {

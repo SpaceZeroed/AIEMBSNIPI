@@ -107,12 +107,7 @@ namespace flowmaps
     class IFlowMapLiquidGas
     {
     public:
-        virtual Result calc(
-            double D,
-            double Roughness,
-            double Angle,
-            double PInflow,
-            double TInflow) = 0;
+        virtual Result calc( ) = 0;
     };
 
     using FlowMapLiquidGasPtr = std::shared_ptr<IFlowMapLiquidGas>;

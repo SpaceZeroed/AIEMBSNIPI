@@ -77,46 +77,47 @@ void Map(int x, int y, vector<vector<int>> Array)
 	SetConsoleTextAttribute(hStdOut, woкkWindowAttributes);
 	//Sleep(1000);
 	system("CLS"); // установка атрибутов цвета рабочей области
-	DrawMenu(); // рисуем меню в верхней строке консоли
-	std::cout << "Hello World! I believe that our proect wil work\n";
+	// рисуем меню в верхней строке консоли
+
 	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
 	//  начальные условия  
-	//FlowMapOrkizhevskiy flow;
-	//Result grad;
+	FlowMapOrkizhevskiy flow;
+	Result grad;
 
-	//qo_ny = 1590.0 / 86400;
-	//qg_ny = 283000.0 / 86400;
-	//qw_ny = 0;
-	//D = 0.1524;
-	//Bo = 1.197;
-	//Bg = 0.0091;
-	//Bw = 0.0;
+	qo_ny = 1590.0 / 86400;
+	qg_ny = 283000.0 / 86400;
+	qw_ny = 0;
+	D = 0.1524;
+	Bo = 1.197;
+	Bg = 0.0091;
+	Bw = 0.0;
 
 	//// вязкость нефти
-	//mu_o = 0.00097;
-	//Roughness = 0.000018288;
-	//PInflow = 117.13 * 100000;
-	//TInflow = 82;
-	//rho_o = 762.64;
-	//Rs = 50.6;
+	mu_o = 0.00097;
+	Roughness = 0.000018288; // !!!!
+	PInflow = 117.13 * 100000;
+	TInflow = 82;
+	rho_o = 762.64;
+	Rs = 50.6;
 	//// ненужные данные   
-	//Rsw = 0;
-	//rho_w = 1000;
-	//mu_w = 1;
-	//double mu_g = 0.000016;
-	//double rho_g = 94.19;
-	//Angle = 90;
+	Rsw = 0;
+	rho_w = 1000;
+	mu_w = 1;
+	double mu_g = 0.000016;
+	double rho_g = 94.19;
+	Angle = 90;
 	////работа с взаимодействием фаз 
-	//double SurfaceTension = 0.0084;
+	double SurfaceTension = 0.0084;
 
-	////
-	//flow.setLiquid(qo_ny, qw_ny, Bo, Bw, mu_o, mu_w, rho_o, rho_w);
-	//flow.setGas(qg_ny, qo_ny, qw_ny, mu_g, Rs, Rsw, Bg, rho_g);
-	//flow.setPhaseInteract(SurfaceTension);
-
+	
+	flow.setLiquid(qo_ny, qw_ny, Bo, Bw, mu_o, mu_w, rho_o, rho_w);
+	flow.setGas(qg_ny, qo_ny, qw_ny, mu_g, Rs, Rsw, Bg, rho_g);
+	flow.setPhaseInteract(SurfaceTension);
+	flow.setArguments(D, 0.000018288, 90, 117.13 * 100000, 82);
+	DrawMenu(flow);
 	// реализация
 
-	//grad = flow.calc(D, 0.000018288, 90, 117.13 * 100000, 82);
+	
 	//std::cout << grad.pressureGradient << "\n";
 
 	//int length;
@@ -125,6 +126,7 @@ void Map(int x, int y, vector<vector<int>> Array)
 	//cin >> length;
 
 	//double izm = flow.MethodMarch(length, D, 0.000018288, 90, 117.13 * 100000, 82);
+
 
 	//Sleep(1500);
 	//system("cls");
