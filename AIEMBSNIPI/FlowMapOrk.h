@@ -37,9 +37,7 @@ namespace flowmaps
             double N_gv,
             double N_Lv);
         
-
             std::vector<std::vector<int>> fillMap(
-
             double D,
             double Roughness,
             double Angle,
