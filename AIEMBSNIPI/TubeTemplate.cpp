@@ -11,14 +11,7 @@ using namespace flowmaps;
 
  int main()
 {
-	system("mode con cols=160 lines=40"); // размер окна. Вроде 1600 на 400 пикселей
-	SetConsoleTitle(L"Pressure calculation"); // заголовок окна
-	setlocale(LC_CTYPE, "rus"); // вызов функции настройки национальных параметров
-	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	GetConsoleScreenBufferInfo(hStdOut, &csbInfo);
-	consolRect = csbInfo.srWindow; //координаты углов консоли
-	SetConsoleTextAttribute(hStdOut, woкkWindowAttributes);
-	system("CLS"); // установка атрибутов цвета рабочей области
+
 
 	double Bo, //объемный коэффициент нефти
 		Bg, //объемный коэффициент газа
