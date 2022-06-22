@@ -155,6 +155,7 @@ namespace flowmaps
         {
             double difP = calc().pressureGradient;
             pIn -= difP;
+            pInflow = pIn;
             deltaP += difP;            
         }
         cout << "P now " << pIn << "|| delta now = " << deltaP << "\n";

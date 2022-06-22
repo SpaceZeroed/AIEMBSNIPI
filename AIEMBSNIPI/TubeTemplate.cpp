@@ -1,6 +1,5 @@
 ﻿// TubeTemplate1.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-
 #include <iostream>
 #include "FlowMaps.h"
 #include "FLowMapOrk.h"
@@ -9,7 +8,9 @@
 #include <iostream>
 #include "MenuDraw.h"
 #include "MenuFunctions.h"
+
 using namespace flowmaps;
+
 extern CONSOLE_SCREEN_BUFFER_INFO csbInfo; //информация о
 // консольном окне в структуре csbInfo
 extern SMALL_RECT consolRect; //координаты углов консоли
