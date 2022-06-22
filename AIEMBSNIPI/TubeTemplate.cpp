@@ -13,26 +13,27 @@ using namespace flowmaps;
 {
 
 
-	double Bo = 1.197, //объемный коэффициент нефти
-		Bg = 0.0091, //объемный коэффициент газа
-		Bw = 0.0, //объемный коэффициент воды
-		Rs = 50.6, //растворимость газа
-		Rsw = 0, //растворимость газа
-		D = 0.1524, //диаметр трубы, м
-		qw_ny = 0, //начальный объемный расход воды, м^3/c
-		qo_ny = 1590.0 / 86400, //начальный объемный расход нефти, м^3/c
-		qg_ny = 283000.0 / 86400, //начальный объемный расход газа	, м^3/c	
-		mu_o = 0.00097, //вязкость нефти, Па*с
-		mu_w = 1, //вязкость воды, Па*с
-		mu_g = 0.000016, //вязкость газа, Па*с
-		rho_o = 762.64, //плотность нефти, кг/м^3
-		rho_w = 1000, //плотность воды, кг/м^3
-		rho_g = 94.19,//плотность газа, кг/м^3
-		Roughness = 0.000018288, // шероховатость, м
-		Angle = 90, // угол, градус
-		PInflow = 117.13 * 100000, //давление на входе, Н/м^2
-		TInflow = 82, //температура на входе, градус цельсия
-		SurfaceTension = 0.0084, //поверхносное натяжение, Н/м
+	 double Bo = 1.197, //объемный коэффициент нефти
+		 Bg = 0.0091, //объемный коэффициент газа
+		 Bw = 0.0, //объемный коэффициент воды
+		 Rs = 50.6, //растворимость газа
+		 Rsw = 0, //растворимость газа
+		 D = 0.1524, //диаметр трубы, м
+		 qw_ny = 0, //начальный объемный расход воды, м^3/c
+		 qo_ny = 1590.0 / 86400, //начальный объемный расход нефти, м^3/c
+		 qg_ny = 283000.0 / 86400, //начальный объемный расход газа	, м^3/c	
+		 mu_o = 0.00097, //вязкость нефти, Па*с
+		 mu_w = 1, //вязкость воды, Па*с
+		 mu_g = 0.000016, //вязкость газа, Па*с
+		 rho_o = 762.64, //плотность нефти, кг/м^3
+		 rho_w = 1000, //плотность воды, кг/м^3
+		 rho_g = 94.19,//плотность газа, кг/м^3
+		 Roughness = 0.000018288, // шероховатость, м
+		 Angle = 90, // угол, градус
+		 PInflow = 117.13 * 100000, //давление на входе, Н/м^2
+		 TInflow = 82, //температура на входе, градус цельсия
+		 SurfaceTension = 0.0084; //поверхносное натяжение, Н/м
+
 	//  начальные условия  
 	FlowMapOrkizhevskiy flow;
 	Result grad;
@@ -40,20 +41,17 @@ using namespace flowmaps;
 	double qo = qo_ny * Bo;//объемный расход нефти, м^3/c
 	double qw = qw_ny * Bw;//объемный расход воды, м^3/c
 
-	double fo = qo / (qw + qo);//доля нефти
-	double fw = 1 - fo;//доля воды
-
 	PhaseInfo Water;
 	Water.q = qw;
 	Water.mu = mu_w;
 	Water.rho = rho_w;
+	Water.rho_sc = rho_w;
 
-
-	PhaseInfo Liquid;
-	Liquid.q = qo + qw;
-	Liquid.mu = mu_o * fo + mu_w * fw;
-	Liquid.rho = rho_o * fo + rho_w * fw;
-	Liquid.rho_sc = Liquid.rho;
+	PhaseInfo Oil;
+	Oil.q = qo;
+	Oil.mu = mu_o;
+	Oil.rho = rho_o;
+	Oil.rho_sc = rho_o;
 
 	PhaseInfo Gas;
 	Gas.mu = mu_g;
@@ -61,9 +59,36 @@ using namespace flowmaps;
 	Gas.rho = rho_g;
 	Gas.rho_sc = Gas.rho;
 
-	PhaseInteract phaseInteract;
-	phaseInteract.lgSurfaceTension = SurfaceTension;
+	PhaseInteract PhaseInteract;
+	PhaseInteract.lgSurfaceTension = SurfaceTension;
 	
+	grad = flow.calc(
+		Water,
+		Oil,
+		Gas,
+		PhaseInteract,
+		D,
+		Roughness,
+		Angle,
+		PInflow,
+		TInflow);
+
+	cout << grad.pressureGradient<< "\n";
+	double length;
+	cin >> length;
+	double otv = flow.MethodMarch(
+		length,
+		Water,
+		Oil,
+		Gas,
+		PhaseInteract,
+		D,
+		Roughness,
+		Angle,
+		PInflow,
+		TInflow);
+
+	cout << otv;
 	return 0;
 }
 

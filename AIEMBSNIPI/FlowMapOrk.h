@@ -11,7 +11,8 @@ namespace flowmaps
         FlowMapOrkizhevskiy();
 
         Result calc(
-            const PhaseInfo& Liquid,
+            const PhaseInfo& Water,
+            const PhaseInfo& Oil,
             const PhaseInfo& Gas,
             const PhaseInteract& PhaseInteract,
             double D,
@@ -20,9 +21,6 @@ namespace flowmaps
             double PInflow,
             double TInflow) override;
 
-        FlowPattern modeSelection(
-            double N_gv,
-            double N_Lv);
        
         Result BubbleMode(
             const PhaseInfo& Liquid,
@@ -68,7 +66,8 @@ namespace flowmaps
 
         double MethodMarch(
             double Length, 
-            const PhaseInfo& Liquid,
+            const PhaseInfo& Water,
+            const PhaseInfo& Oil,
             const PhaseInfo& Gas,
             const PhaseInteract& PhaseInteract,
             double D,

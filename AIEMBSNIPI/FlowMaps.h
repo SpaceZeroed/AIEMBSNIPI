@@ -108,7 +108,8 @@ namespace flowmaps
     {
     public:
         virtual Result calc(
-            const PhaseInfo& Liquid,
+            const PhaseInfo& Water,
+            const PhaseInfo& Oil,
             const PhaseInfo& Gas,
             const PhaseInteract& PhaseInteract,
             double D,

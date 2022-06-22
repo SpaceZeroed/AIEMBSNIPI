@@ -45,7 +45,7 @@ namespace flowmaps
         MainFase mainFase)
     {
         Result res;
-        double Ap, Ed, Vb1, Vb2, Re_B, Vbs, liqDistribCoef, X, rho_s;
+        double Ap, Ed, Vb1, Vb2, Re_B, Vbs, liqDistribCoef, X, rho_s, pn, lambda_L, mu_n; // добавить комменты..;
         /*
         */
         res.flowPattern = FlowPattern::CorkMode;
@@ -103,7 +103,7 @@ namespace flowmaps
         rho_s = (Liquid.rho * (res.liquidVelocity + Vb2) + Gas.rho * res.gasVelocity) / (res.fluidMeanVelocity + Vb2) + Liquid.rho * liqDistribCoef;//4.63
 
         Ed = Roughness / D;
-        double pn, lambda_L, mu_n; // добавить комменты..
+        
         lambda_L = Liquid.q / (Liquid.q + Gas.q);//3.8
         pn = Liquid.rho * lambda_L + Gas.rho * (1 - lambda_L);//3.23
         mu_n = Liquid.mu * lambda_L + Gas.mu * (1 - lambda_L);//3.23
@@ -126,7 +126,7 @@ namespace flowmaps
         double TInflow)
     {
         Result res;
-        double Ap, N_we, N_mu, Ed, Vsg, E_k, rho_n, rho_s;
+        double Ap, N_we, N_mu, Ed, Vsg, E_k, rho_n, rho_s, pn, lambda_L, mu_n;;
         res.flowPattern = FlowPattern::EmulsionMode;
         Ap = PI * D * D / 4;
         Vsg = Gas.q / Ap; //3.11
@@ -143,7 +143,7 @@ namespace flowmaps
             Ed = 0.3713 * PhaseInteract.lgSurfaceTension * pow(N_mu * N_we, 0.302) / (Gas.rho * pow(Vsg, 2) * D);//4.50
         }
 
-        double pn, lambda_L, mu_n;
+        
         lambda_L = Liquid.q / (Liquid.q + Gas.q);//3.8
         pn = Liquid.rho * lambda_L + Gas.rho * (1 - lambda_L);//3.23
         mu_n = Liquid.mu * lambda_L + Gas.mu * (1 - lambda_L);//3.23
@@ -217,7 +217,8 @@ namespace flowmaps
 
     double FlowMapOrkizhevskiy::MethodMarch(
         double Length, 
-        const PhaseInfo& Liquid,
+        const PhaseInfo& Water,
+        const PhaseInfo& Oil,
         const PhaseInfo& Gas,
         const PhaseInteract& PhaseInteract,
         double D,
@@ -231,7 +232,8 @@ namespace flowmaps
         for (int i = 0; i < Length; i++)
         {
             double difP = calc(
-                Liquid,
+                Water,
+                Oil,
                 Gas,
                 PhaseInteract,
                 D,
@@ -262,7 +264,8 @@ namespace flowmaps
     }
 
     Result FlowMapOrkizhevskiy::calc(
-        const PhaseInfo& Liquid,
+        const PhaseInfo& Water,
+        const PhaseInfo& Oil,
         const PhaseInfo& Gas,
         const PhaseInteract& PhaseInteract,
         double D,
@@ -274,6 +277,17 @@ namespace flowmaps
         Result res;
         double Lb, Ap, lambda_L, Ngv, Ngvstr, Nlv, Ngvtrm;
         Ap = PI * D * D/ 4;
+
+        double fo = Oil.q / (Water.q + Oil.q);//доля нефти
+        double fw = 1 - fo;//доля воды
+
+        PhaseInfo Liquid;
+        Liquid.q = Oil.q + Water.q;
+        Liquid.mu = Oil.mu * fo + Water.mu * fw;
+        Liquid.rho = Oil.rho * fo + Water.rho * fw;
+        Liquid.rho_sc = Liquid.rho;
+
+        MainFase mainFase = DefineMainFase(Oil.mu, fw);
         res.fluidMeanVelocity = (Liquid.q + Gas.q) / Ap;
         Lb = 1.071 - 0.2218 * pow(res.fluidMeanVelocity / 0.3048, 2) * 0.3048 / D;//4.59
         if (Lb < 0.13)
@@ -310,7 +324,8 @@ namespace flowmaps
                 Roughness,
                 Angle,
                 PInflow,
-                TInflow);
+                TInflow,
+                mainFase);
             res.flowPattern = FlowPattern::CorkMode;
         }
 
@@ -324,7 +339,8 @@ namespace flowmaps
                 Roughness,
                 Angle,
                 PInflow,
-                TInflow);
+                TInflow,
+                mainFase);
             res.flowPattern = FlowPattern::TransitionalMode;
         }
         else
