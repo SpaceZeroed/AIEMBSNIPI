@@ -13,60 +13,36 @@ using namespace flowmaps;
 {
 
 
-	double Bo, //объемный коэффициент нефти
-		Bg, //объемный коэффициент газа
-		Rs, //
-		D, //диаметр трубы
-		qw_ny, //объемный расход воды
-		qo_ny, //объемный расход нефти
-		qg_ny, // объемный расход газа
-		Bw, //объемный коэффициент воды
-		mu_o, //вязкость нефти
-		mu_w, //вязкость воды
-		rho_o, //
-		rho_w, //
-		Rsw, //
-		Roughness, // 
-		Angle, // 
-		PInflow, //
-		TInflow; //
-	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
+	double Bo = 1.197, //объемный коэффициент нефти
+		Bg = 0.0091, //объемный коэффициент газа
+		Bw = 0.0, //объемный коэффициент воды
+		Rs = 50.6, //растворимость газа
+		Rsw = 0, //растворимость газа
+		D = 0.1524, //диаметр трубы
+		qw_ny = 0, //начальный объемный расход воды
+		qo_ny = 1590.0 / 86400, //начальный объемный расход нефти
+		qg_ny = 283000.0 / 86400, //начальный объемный расход газа		
+		mu_o = 0.00097, //вязкость нефти
+		mu_w = 1, //вязкость воды
+		mu_g = 0.000016, //вязкость газа
+		rho_o = 762.64, //плотность нефти
+		rho_w = 1000, //плотность воды
+		rho_g = 94.19,//плотность газа
+		Roughness = 0.000018288, // шероховатость
+		Angle = 90, // угол
+		PInflow = 117.13 * 100000, //давление на входе
+		TInflow = 82, //температура на входе
+		SurfaceTension = 0.0084, //поверхносное натяжение
 	//  начальные условия  
 	FlowMapOrkizhevskiy flow;
 	Result grad;
 
-	qo_ny = 1590.0 / 86400;
-	qg_ny = 283000.0 / 86400;
-	qw_ny = 0;
-	D = 0.1524;
-	Bo = 1.197;
-	Bg = 0.0091;
-	Bw = 0.0;
+	double qo = qo_ny * Bo;//объемный расход нефти
+	double qw = qw_ny * Bw;//объемный расход воды
 
-	//// вязкость нефти
-	mu_o = 0.00097;
-	Roughness = 0.000018288; // !!!!
-	PInflow = 117.13 * 100000;
-	TInflow = 82;
-	rho_o = 762.64;
-	Rs = 50.6;
-	//// ненужные данные   
-	Rsw = 0;
-	rho_w = 1000;
-	mu_w = 1;
-	double mu_g = 0.000016;
-	double rho_g = 94.19;
-	Angle = 90;
-	////работа с взаимодействием фаз 
-	double SurfaceTension = 0.0084;
+	double fo = qo / (qw + qo);//доля нефти
+	double fw = 1 - fo;//доля воды
 
-	double qo = qo_ny * Bo;
-	double qw = qw_ny * Bw;
-
-	double fo = qo / (qw + qo);
-	double fw = 1 - fo;
-
-	mainFase = DefineMainFase(mu_o, fw);
 
 	PhaseInfo Liquid;
 	Liquid.q = qo + qw;
