@@ -87,7 +87,7 @@ void Clear(FlowMapOrkizhevskiy flow)
 	HBRUSH hBrush; //создаѐм объект-кисть
 	hBrush = CreateSolidBrush(RGB(60, 119, 255)); //создаем сплошную кисть
 	SelectObject(hDC, hBrush); //делаем кисть активной
-	const RECT  rct = { 50,199,1310,404 };
+	const RECT  rct = { 50,199,1310,444 };
 	FillRect(hDC, &rct,hBrush);
 	SelectObject(hDC, GetStockObject(WHITE_PEN));
 }
