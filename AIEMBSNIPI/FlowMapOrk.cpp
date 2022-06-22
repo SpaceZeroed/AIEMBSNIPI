@@ -29,6 +29,8 @@ namespace flowmaps
     {
         Result res;
         double Ap, Ed, Vb1, Vb2, Re_B, Vbs, liqDistribCoef, X, rho_s;
+        /*
+        */
         res.flowPattern = FlowPattern::CorkMode;
         Ap = PI * d * d / 4;
         res.fluidMeanVelocity = (liquid.q + gas.q) / Ap;
@@ -69,7 +71,7 @@ namespace flowmaps
         rho_s = (liquid.rho * (res.liquidVelocity + Vb2) + gas.rho * res.gasVelocity) / (res.fluidMeanVelocity + Vb2) + liquid.rho * liqDistribCoef;//4.63
 
         Ed = roughness / d;
-        double pn, lambda_L, mu_n;
+        double pn, lambda_L, mu_n; // добавить комменты..
         lambda_L = liquid.q / (liquid.q + gas.q);//3.8
         pn = liquid.rho * lambda_L + gas.rho * (1 - lambda_L);//3.23
         mu_n = liquid.mu * lambda_L + gas.mu * (1 - lambda_L);//3.23

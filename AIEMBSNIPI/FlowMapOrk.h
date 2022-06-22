@@ -9,22 +9,7 @@ namespace flowmaps
     {
     public:
         FlowMapOrkizhevskiy();
-        FlowPattern mainFlowPattern;
-        PhaseInfo liquid;
-        PhaseInfo gas;
-        PhaseInteract phaseInteract;
-        MainFase mainFase;
-        double d;
-        double roughness;
-        double angle;
-        double pInflow;
-        double tInflow;
-        void setD(double d);
-        void setRoughness(double Roughness);
-        void setAngle(double Angle);
-        void setLiquid(double qo_ny, double qw_ny, double Bo, double Bw, double mu_o, double mu_w, double rho_o, double rho_w);
-        void setGas(double qg_ny, double qo_ny, double qw_ny, double mu_g, double Rs, double Rsw, double Bg, double rho_g);
-        void setPhaseInteract(double SurfaceTension);
+
 
         void  setArguments(
             double D,

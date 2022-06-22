@@ -140,15 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FlowMapOrk.cpp" />
-    <ClCompile Include="MenuDraw.cpp" />
-    <ClCompile Include="MenuFunctions.cpp" />
     <ClCompile Include="TubeTemplate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FlowMapOrk.h" />
     <ClInclude Include="FlowMaps.h" />
-    <ClInclude Include="MenuDraw.h" />
-    <ClInclude Include="MenuFunctions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
