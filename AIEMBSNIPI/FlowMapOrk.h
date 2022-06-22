@@ -10,7 +10,8 @@ namespace flowmaps
     public:
         FlowMapOrkizhevskiy();
 
-        Result calc(const PhaseInfo& Liquid,
+        Result calc(
+            const PhaseInfo& Liquid,
             const PhaseInfo& Gas,
             const PhaseInteract& PhaseInteract,
             double D,
@@ -22,10 +23,9 @@ namespace flowmaps
         FlowPattern modeSelection(
             double N_gv,
             double N_Lv);
-        
-            std::vector<std::vector<int>> fillMap();        
-
-        Result BubbleMode(const PhaseInfo& Liquid,
+       
+        Result BubbleMode(
+            const PhaseInfo& Liquid,
             const PhaseInfo& Gas,
             const PhaseInteract& PhaseInteract,
             double D,
@@ -34,7 +34,8 @@ namespace flowmaps
             double PInflow,
             double TInflow);
 
-        Result CorkMode(const PhaseInfo& Liquid,
+        Result CorkMode(
+            const PhaseInfo& Liquid,
             const PhaseInfo& Gas,
             const PhaseInteract& PhaseInteract,
             double D,
@@ -43,7 +44,8 @@ namespace flowmaps
             double PInflow,
             double TInflow);
 
-        Result EmulsionMode(const PhaseInfo& Liquid,
+        Result EmulsionMode(
+            const PhaseInfo& Liquid,
             const PhaseInfo& Gas,
             const PhaseInteract& PhaseInteract,
             double D,
@@ -52,7 +54,8 @@ namespace flowmaps
             double PInflow,
             double TInflow);
 
-        Result TransitionalMode(const PhaseInfo& Liquid,
+        Result TransitionalMode(
+            const PhaseInfo& Liquid,
             const PhaseInfo& Gas,
             const PhaseInteract& PhaseInteract,
             double D,
