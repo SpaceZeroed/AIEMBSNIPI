@@ -74,7 +74,23 @@ void Map(int x, int y, vector<vector<int>> Array)
 	SetConsoleTextAttribute(hStdOut, woкkWindowAttributes);
 	system("CLS"); // установка атрибутов цвета рабочей области
 
-	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
+	double Bo, //объемный коэффициент нефти
+		Bg, //объемный коэффициент газа
+		Rs, //
+		D, //диаметр трубы
+		qw_ny, //объемный расход воды
+		qo_ny, //объемный расход нефти
+		qg_ny, // объемный расход газа
+		Bw, //объемный коэффициент воды
+		mu_o, //вязкость нефти
+		mu_w, //вязкость воды
+		rho_o, //
+		rho_w, //
+		Rsw, //
+		Roughness, // 
+		Angle, // 
+		PInflow, //
+		TInflow; //
 	//  начальные условия  
 	FlowMapOrkizhevskiy flow;
 	Result grad;
