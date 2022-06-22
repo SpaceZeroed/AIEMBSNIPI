@@ -9,75 +9,91 @@ namespace flowmaps
 
     }
 
-    Result FlowMapOrkizhevskiy::BubbleMode()
+    Result FlowMapOrkizhevskiy::BubbleMode(
+        const PhaseInfo& Liquid,
+        const PhaseInfo& Gas,
+        const PhaseInteract& PhaseInteract,
+        double D,
+        double Roughness,
+        double Angle,
+        double PInflow,
+        double TInflow)
     {
         Result res;
         double Vs, HL, Ap, Ed;
         res.flowPattern = FlowPattern::BubbleMode;
-        Ap = PI * d * d / 4;
-        res.fluidMeanVelocity = (liquid.q + gas.q) / Ap;
+        Ap = PI * D * D / 4;
+        res.fluidMeanVelocity = (Liquid.q + Gas.q) / Ap;
         Vs = 0.244;
-        HL = 1 - (1 + res.fluidMeanVelocity / Vs - sqrt(pow(1 + res.fluidMeanVelocity / Vs, 2) - 4 * gas.q / (Ap * Vs))) / 2;//4.60
-        res.Re = liquid.rho * (liquid.q / (Ap * HL)) * d / liquid.mu;//4.62
-        Ed = roughness / d;
+        HL = 1 - (1 + res.fluidMeanVelocity / Vs - sqrt(pow(1 + res.fluidMeanVelocity / Vs, 2) - 4 * Gas.q / (Ap * Vs))) / 2;//4.60
+        res.Re = Liquid.rho * (Liquid.q / (Ap * HL)) * D / Liquid.mu;//4.62
+        Ed = Roughness / D;
         res.frictionFactor = pow(-2 * log10(2 * Ed / 3.7 - (5.02 / res.Re) * log10(2 * Ed / 3.7 + 13 / res.Re)), -2);//2.19
-        res.pressureGradient = res.frictionFactor * liquid.rho * pow(liquid.q / (Ap * HL), 2) / (2 * d);//4.61
+        res.pressureGradient = res.frictionFactor * Liquid.rho * pow(Liquid.q / (Ap * HL), 2) / (2 * D);//4.61
         return res;
     }
 
-    Result FlowMapOrkizhevskiy::CorkMode()
+    Result FlowMapOrkizhevskiy::CorkMode(
+        const PhaseInfo& Liquid,
+        const PhaseInfo& Gas,
+        const PhaseInteract& PhaseInteract,
+        double D,
+        double Roughness,
+        double Angle,
+        double PInflow,
+        double TInflow)
     {
         Result res;
         double Ap, Ed, Vb1, Vb2, Re_B, Vbs, liqDistribCoef, X, rho_s;
         /*
         */
         res.flowPattern = FlowPattern::CorkMode;
-        Ap = PI * d * d / 4;
-        res.fluidMeanVelocity = (liquid.q + gas.q) / Ap;
-        res.liquidVelocity = liquid.q / Ap;//Vsl
-        res.gasVelocity = gas.q / Ap;
-        res.Re_L = liquid.rho * res.fluidMeanVelocity * d / liquid.mu;//4.66
-        Vb2 = 0.5 * sqrt(g * d);//4.71
-        Re_B = liquid.rho * Vb2 * d / liquid.mu;//4.66
+        Ap = PI * D * D / 4;
+        res.fluidMeanVelocity = (Liquid.q + Gas.q) / Ap;
+        res.liquidVelocity = Liquid.q / Ap;//Vsl
+        res.gasVelocity = Gas.q / Ap;
+        res.Re_L = Liquid.rho * res.fluidMeanVelocity * D / Liquid.mu;//4.66
+        Vb2 = 0.5 * sqrt(g * D);//4.71
+        Re_B = Liquid.rho * Vb2 * D / Liquid.mu;//4.66
 
         do
         {
             Vb1 = Vb2;
             if (Re_B <= 3000)
             {
-                Vb2 = (0.546 + 8.74 * 0.000001 * res.Re_L) * sqrt(g * d);//4.67
+                Vb2 = (0.546 + 8.74 * 0.000001 * res.Re_L) * sqrt(g * D);//4.67
             }
             else if (Re_B >= 8000)
             {
-                Vb2 = (0.35 + 8.74 * 0.000001 * res.Re_L) * sqrt(g * d);//4.68
+                Vb2 = (0.35 + 8.74 * 0.000001 * res.Re_L) * sqrt(g * D);//4.68
             }
             else
             {
-                Vbs = (0.251 + 8.74 * 0.000001 * res.Re_L) * sqrt(g * d);//4.70
-                Vb2 = 0.5 * (Vbs + sqrt(pow(Vbs, 2) + 13.59 * liquid.mu / (liquid.rho * sqrt(d))));//4.69
+                Vbs = (0.251 + 8.74 * 0.000001 * res.Re_L) * sqrt(g * D);//4.70
+                Vb2 = 0.5 * (Vbs + sqrt(pow(Vbs, 2) + 13.59 * Liquid.mu / (Liquid.rho * sqrt(D))));//4.69
             }
-            Re_B = liquid.rho * Vb2 * d / liquid.mu;//4.66
+            Re_B = Liquid.rho * Vb2 * D / Liquid.mu;//4.66
         } while (abs(Vb1 - Vb2) / Vb1 > 0.05);
 
         if (res.fluidMeanVelocity < 3)//liqDistribCoef = 
         {
-            liqDistribCoef = 0.0127 * log10(liquid.mu + 1) / pow(d / 0.3048, 1.415) - 0.284 + 0.167 * log10(res.fluidMeanVelocity / 0.3048) + 0.113 * log10(d / 0.3048);// 4.74          
+            liqDistribCoef = 0.0127 * log10(Liquid.mu + 1) / pow(D / 0.3048, 1.415) - 0.284 + 0.167 * log10(res.fluidMeanVelocity / 0.3048) + 0.113 * log10(D / 0.3048);// 4.74          
         }
         else
         {
-            X = -log10(res.fluidMeanVelocity) * (0.01 * log10(liquid.mu + 1) / pow(d / 0.3048, 1.571) + 0.397 + 0.63 * log10(d / 0.3048));//4.76
-            liqDistribCoef = 0.0274 * log10(liquid.mu + 1) / pow(d / 0.3048, 1.371) + 0.161 + 0.569 * log10(d / 0.3048) + X;//4.75
+            X = -log10(res.fluidMeanVelocity) * (0.01 * log10(Liquid.mu + 1) / pow(D / 0.3048, 1.571) + 0.397 + 0.63 * log10(D / 0.3048));//4.76
+            liqDistribCoef = 0.0274 * log10(Liquid.mu + 1) / pow(D / 0.3048, 1.371) + 0.161 + 0.569 * log10(D / 0.3048) + X;//4.75
         }
-        rho_s = (liquid.rho * (res.liquidVelocity + Vb2) + gas.rho * res.gasVelocity) / (res.fluidMeanVelocity + Vb2) + liquid.rho * liqDistribCoef;//4.63
+        rho_s = (Liquid.rho * (res.liquidVelocity + Vb2) + Gas.rho * res.gasVelocity) / (res.fluidMeanVelocity + Vb2) + Liquid.rho * liqDistribCoef;//4.63
 
-        Ed = roughness / d;
+        Ed = Roughness / D;
         double pn, lambda_L, mu_n; // добавить комменты..
-        lambda_L = liquid.q / (liquid.q + gas.q);//3.8
-        pn = liquid.rho * lambda_L + gas.rho * (1 - lambda_L);//3.23
-        mu_n = liquid.mu * lambda_L + gas.mu * (1 - lambda_L);//3.23
-        res.Re = pn * res.fluidMeanVelocity * d / mu_n;
+        lambda_L = Liquid.q / (Liquid.q + Gas.q);//3.8
+        pn = Liquid.rho * lambda_L + Gas.rho * (1 - lambda_L);//3.23
+        mu_n = Liquid.mu * lambda_L + Gas.mu * (1 - lambda_L);//3.23
+        res.Re = pn * res.fluidMeanVelocity * D / mu_n;
         res.frictionFactor = pow(-2 * log10(2 * Ed / 3.7 - (5.02 / res.Re) * log10(2 * Ed / 3.7 + 13 / res.Re)), -2);//2.19
-        res.pressureGradientFriction = ((res.liquidVelocity + Vb2) / (res.fluidMeanVelocity + Vb2) + liqDistribCoef) * res.frictionFactor * liquid.rho * pow(res.fluidMeanVelocity, 2) / (2 * d);//4.79
+        res.pressureGradientFriction = ((res.liquidVelocity + Vb2) / (res.fluidMeanVelocity + Vb2) + liqDistribCoef) * res.frictionFactor * Liquid.rho * pow(res.fluidMeanVelocity, 2) / (2 * D);//4.79
         res.pressureGradient = res.pressureGradientFriction + rho_s * g;//4.31
 
         return res;
@@ -97,25 +113,25 @@ namespace flowmaps
         double Ap, N_we, N_mu, Ed, Vsg, E_k, rho_n, rho_s;
         res.flowPattern = FlowPattern::EmulsionMode;
         Ap = PI * D * D / 4;
-        Vsg = gas.q / Ap; //3.11
+        Vsg = Gas.q / Ap; //3.11
 
-        N_we = gas.rho * pow(Vsg, 2) * roughness / phaseInteract.lgSurfaceTension; // 4.47
-        N_mu = pow(liquid.mu, 2) / (liquid.rho * phaseInteract.lgSurfaceTension * roughness); //4,48
+        N_we = Gas.rho * pow(Vsg, 2) * Roughness / PhaseInteract.lgSurfaceTension; // 4.47
+        N_mu = pow(Liquid.mu, 2) / (Liquid.rho * PhaseInteract.lgSurfaceTension * Roughness); //4,48
 
         if (N_mu * N_we <= 0.005)
         {
-            Ed = 0.0749 * phaseInteract.lgSurfaceTension / (gas.rho * pow(Vsg, 2) * d);//4.49
+            Ed = 0.0749 * PhaseInteract.lgSurfaceTension / (Gas.rho * pow(Vsg, 2) * D);//4.49
         }
         else
         {
-            Ed = 0.3713 * phaseInteract.lgSurfaceTension * pow(N_mu * N_we, 0.302) / (gas.rho * pow(Vsg, 2) * d);//4.50
+            Ed = 0.3713 * PhaseInteract.lgSurfaceTension * pow(N_mu * N_we, 0.302) / (Gas.rho * pow(Vsg, 2) * D);//4.50
         }
 
         double pn, lambda_L, mu_n;
-        lambda_L = liquid.q / (liquid.q + gas.q);//3.8
-        pn = liquid.rho * lambda_L + gas.rho * (1 - lambda_L);//3.23
-        mu_n = liquid.mu * lambda_L + gas.mu * (1 - lambda_L);//3.23
-        res.Re = pn * res.fluidMeanVelocity * d / mu_n;
+        lambda_L = Liquid.q / (Liquid.q + Gas.q);//3.8
+        pn = Liquid.rho * lambda_L + Gas.rho * (1 - lambda_L);//3.23
+        mu_n = Liquid.mu * lambda_L + Gas.mu * (1 - lambda_L);//3.23
+        res.Re = pn * res.fluidMeanVelocity * D / mu_n;
 
         if (Ed > 0.05)
         {
@@ -126,14 +142,14 @@ namespace flowmaps
             res.frictionFactor = pow(-2 * log10(2 * Ed / 3.7 - (5.02 / res.Re) * log10(2 * Ed / 3.7 + 13 / res.Re)), -2);//2,19
         }
 
-        res.pressureGradientFriction = res.frictionFactor * gas.rho * pow(Vsg, 2) / (2 * d); //4,45
-        res.fluidMeanVelocity = (liquid.q + gas.q) / Ap; // fluidMeanVelocity = Vm
+        res.pressureGradientFriction = res.frictionFactor * Gas.rho * pow(Vsg, 2) / (2 * D); //4,45
+        res.fluidMeanVelocity = (Liquid.q + Gas.q) / Ap; // fluidMeanVelocity = Vm
 
-        lambda_L = liquid.q / (liquid.q + gas.q);//3.8
-        rho_n = lambda_L * liquid.rho + gas.rho * (1 - lambda_L);//3.23
-        E_k = res.fluidMeanVelocity * Vsg * rho_n / pInflow;
+        lambda_L = Liquid.q / (Liquid.q + Gas.q);//3.8
+        rho_n = lambda_L * Liquid.rho + Gas.rho * (1 - lambda_L);//3.23
+        E_k = res.fluidMeanVelocity * Vsg * rho_n / PInflow;
         // 104
-        rho_s = liquid.rho * lambda_L + gas.rho * (1 - lambda_L);//3.22
+        rho_s = Liquid.rho * lambda_L + Gas.rho * (1 - lambda_L);//3.22
         //       
         res.pressureGradientElevation = rho_s * g;
         res.pressureGradient = (res.pressureGradientElevation + res.pressureGradientFriction) / (1 - E_k); //4.54

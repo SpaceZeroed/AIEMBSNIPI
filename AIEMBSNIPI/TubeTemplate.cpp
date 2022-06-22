@@ -6,63 +6,9 @@
 #include <windows.h>
 #include <conio.h>
 #include <iostream>
-#include "MenuDraw.h"
-#include "MenuFunctions.h"
 
 using namespace flowmaps;
 
-extern CONSOLE_SCREEN_BUFFER_INFO csbInfo; //информация о
-// консольном окне в структуре csbInfo
-extern SMALL_RECT consolRect; //координаты углов консоли
-extern WORD woкkWindowAttributes; //атрибуты рабочей
-extern HANDLE hStdOut;
-//области консоли
-bool KEY[256]; // id keyboard
-// обработка клавиатуры 
-void GetKEY() 
-{
-	int i = 0;
-	while (i < 256)
-	{
-		if (GetAsyncKeyState(i)) KEY[i] = 1; else KEY[i] = 0;
-		i++;
-	}
-}
-// Рисование карты режимов
-void Map(int x, int y, vector<vector<int>> Array)
-{
-
-	HWND hWnd = GetConsoleWindow();
-	HDC hDC = GetDC(hWnd);
-	RECT rct = { x,y-1,x+1102,y+203 };
-	FrameRect(hDC, &rct, CreateSolidBrush(RGB(255, 0, 0)));
-	for (int i = 0; i < 202; i++) {
-		for (int j = 0; j < 1100; j++) {
-			switch (Array[i][j])
-			{
-			case 0:
-				SetPixel(hDC, x + j + 1, y - i + 201, RGB(0, 0, 255)); // Пузырьковый-синий
-				break;
-			case 1:
-				SetPixel(hDC, x + j + 1, y - i + 201, RGB(0, 255, 0)); // Пробковый-зеленый
-				break;
-			case 2:
-				SetPixel(hDC, x + j + 1, y - i + 201, RGB(255, 0, 0)); // Переходный- красный
-				break;
-			case 3:
-				SetPixel(hDC, x + j + 1, y - i + 201, RGB(255, 255, 255)); // Эмульсионный - белый
-				break;
-			case 4:
-				SetPixel(hDC, x + j + 1, y - i + 201, RGB(0, 255, 255)); // на случай ошибки
-				break;
-			}
-
-		}
-	}
-
-	ReleaseDC(hWnd, hDC);
-
-}
  int main()
 {
 	system("mode con cols=160 lines=40"); // размер окна. Вроде 1600 на 400 пикселей
@@ -91,6 +37,7 @@ void Map(int x, int y, vector<vector<int>> Array)
 		Angle, // 
 		PInflow, //
 		TInflow; //
+	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
 	//  начальные условия  
 	FlowMapOrkizhevskiy flow;
 	Result grad;
