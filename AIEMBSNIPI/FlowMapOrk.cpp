@@ -83,12 +83,20 @@ namespace flowmaps
         return res;
     }
 
-    Result FlowMapOrkizhevskiy::EmulsionMode()
+    Result FlowMapOrkizhevskiy::EmulsionMode(
+        const PhaseInfo& Liquid,
+        const PhaseInfo& Gas,
+        const PhaseInteract& PhaseInteract,
+        double D,
+        double Roughness,
+        double Angle,
+        double PInflow,
+        double TInflow)
     {
         Result res;
         double Ap, N_we, N_mu, Ed, Vsg, E_k, rho_n, rho_s;
         res.flowPattern = FlowPattern::EmulsionMode;
-        Ap = PI * d * d / 4;
+        Ap = PI * D * D / 4;
         Vsg = gas.q / Ap; //3.11
 
         N_we = gas.rho * pow(Vsg, 2) * roughness / phaseInteract.lgSurfaceTension; // 4.47
@@ -132,16 +140,40 @@ namespace flowmaps
         return res;
     }
 
-    Result FlowMapOrkizhevskiy::TransitionalMode()
+    Result FlowMapOrkizhevskiy::TransitionalMode(
+        const PhaseInfo& Liquid,
+        const PhaseInfo& Gas,
+        const PhaseInteract& PhaseInteract,
+        double D,
+        double Roughness,
+        double Angle,
+        double PInflow,
+        double TInflow)
     {
         Result resCork, resEmul, res;
         double Ngvstr, Ngvtrm, Ap, Ngv, Nlv, A;
         res.flowPattern = FlowPattern::TransitionalMode;
-        Ap = PI * d * d / 4;
-        resCork = CorkMode();
-        resEmul = EmulsionMode();
-        Ngv = (gas.q / Ap) * pow(liquid.rho / (g * phaseInteract.lgSurfaceTension), 1 / 4);//4.4
-        Nlv = (liquid.q / Ap) * pow(liquid.rho / (g * phaseInteract.lgSurfaceTension), 1 / 4);//4.3
+        Ap = PI * D * D / 4;
+        resCork = CorkMode(
+            Liquid,
+            Gas,
+            PhaseInteract,
+            D,
+            Roughness,
+            Angle,
+            PInflow,
+            TInflow);
+        resEmul = EmulsionMode(
+            Liquid,
+            Gas,
+            PhaseInteract,
+            D,
+            Roughness,
+            Angle,
+            PInflow,
+            TInflow);
+        Ngv = (Gas.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1 / 4);//4.4
+        Nlv = (Liquid.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1 / 4);//4.3
         Ngvstr = 50 + 36 * Nlv;//4.32b
         Ngvtrm = 75 + 84 * pow(Nlv, 0.75);//4.32c
         A = (Ngvtrm - Ngv) / (Ngvtrm - Ngvstr);//4.56
@@ -149,50 +181,35 @@ namespace flowmaps
         return res;
     }
 
-    double FlowMapOrkizhevskiy::MethodMarch(double Length)
+    double FlowMapOrkizhevskiy::MethodMarch(
+        double Length, 
+        const PhaseInfo& Liquid,
+        const PhaseInfo& Gas,
+        const PhaseInteract& PhaseInteract,
+        double D,
+        double Roughness,
+        double Angle,
+        double PInflow,
+        double TInflow)
     {
         double deltaP = 0.0;
-        double pIn = pInflow;
+        double pIn = PInflow;
         for (int i = 0; i < Length; i++)
         {
-            double difP = calc().pressureGradient;
+            double difP = calc(
+                Liquid,
+                Gas,
+                PhaseInteract,
+                D,
+                Roughness,
+                Angle,
+                pIn,
+                TInflow).pressureGradient;
             pIn -= difP;
-            pInflow = pIn;
             deltaP += difP;            
         }
         cout << "P now " << pIn << "|| delta now = " << deltaP << "\n";
         return deltaP;
-    }
-
-    Result FlowMapOrkizhevskiy::GreyMethod()
-    {
-        Result res;
-        double R, Ap, Vsg, Vsl, rho_n, lambda_L, N_v, N_D, B, HL, rho_s, epsilon_palka, epsilon, Ed;
-        Ap = PI * d * d / 4;
-        Vsg = gas.q / Ap; //3.11
-        Vsl = liquid.q / Ap;
-        res.fluidMeanVelocity = (liquid.q + gas.q) / Ap;
-        R = Vsl / Vsg;//4.14
-        lambda_L = liquid.q / (liquid.q + gas.q);//3.8
-        rho_n = lambda_L * liquid.rho + gas.rho * (1 - lambda_L);//3.23
-        N_v = (pow(rho_n, 2) * pow(res.fluidMeanVelocity, 4)) / (g * phaseInteract.lgSurfaceTension * (liquid.rho - gas.rho));//4.12
-        N_D = g * (liquid.rho - gas.rho) * pow(d, 2) / phaseInteract.lgSurfaceTension;//4.13
-        B = 0.0814 * (1 - 0.0554 * log(1 + 730 * R / (R + 1)));//4.16
-        HL = 1 - (1 - exp(-2.314 * (N_v * pow(1 + 205 / N_D, B)))) / (R + 1);//4.15
-        rho_s = liquid.rho * HL + gas.rho * (1 - HL);//3.22
-        epsilon_palka = 28.5 * phaseInteract.lgSurfaceTension / (rho_n * pow(res.fluidMeanVelocity, 2));//4.18
-        if (R >= 0.007)
-        {
-            epsilon = epsilon_palka;
-        }
-        else
-        {
-            epsilon = roughness + R * (epsilon_palka - roughness) / 0.007;
-        }
-        Ed = roughness / d;
-        res.frictionFactor = pow(-2 * log10(2 * Ed / 3.7 - (5.02 / res.Re) * log10(2 * Ed / 3.7 + 13 / res.Re)), -2);//2.19
-        res.pressureGradient = res.frictionFactor * rho_n * pow(res.fluidMeanVelocity, 2) / (2 * d) + rho_s * g - pow(rho_n, 2) / rho_n;//4.11
-        return res;
     }
 
     MainFase DefineMainFase(double mu_o, double fw)
@@ -210,205 +227,86 @@ namespace flowmaps
         }
     }
 
-    void FlowMapOrkizhevskiy::setD(double D)
-    {
-        d = D;
-    }
-
-    void FlowMapOrkizhevskiy::setRoughness(double r)
-    {
-        roughness = r;
-    }
-
-    void FlowMapOrkizhevskiy::setAngle(double An)
-    {
-        angle = An;
-    }
-
-    void FlowMapOrkizhevskiy::setLiquid(double qo_ny, double qw_ny, double Bo, double Bw, double mu_o, double mu_w, double rho_o, double rho_w)
-    {
-        double qo = qo_ny * Bo;
-        double qw = qw_ny * Bw;
-
-        double fo = qo / (qw + qo);
-        double fw = 1 - fo;
-
-        mainFase = DefineMainFase(mu_o, fw);
-        liquid.q = qo + qw;
-        liquid.mu = mu_o * fo + mu_w * fw;
-        liquid.rho = rho_o * fo + rho_w * fw;
-        liquid.rho_sc = liquid.rho;
-    }
-
-    void FlowMapOrkizhevskiy::setGas(double qg_ny, double qo_ny, double qw_ny, double mu_g, double Rs, double Rsw, double Bg, double rho_g)
-    {
-        gas.mu = mu_g;
-        gas.q = (qg_ny - qo_ny * Rs - qw_ny * Rsw) * Bg;
-        gas.rho = rho_g;
-        gas.rho_sc = gas.rho;
-    }
-
-
-    void FlowMapOrkizhevskiy::setPhaseInteract(double SurfaceTension)
-    {
-        phaseInteract.lgSurfaceTension = SurfaceTension;
-    }
-
-
-
-    void FlowMapOrkizhevskiy::setArguments(double D, double Roughness, double Angle, double PInflow, double TInflow)
-    {
-        d = D;
-        roughness = Roughness;
-        angle = Angle;
-        pInflow = PInflow;
-        tInflow = TInflow;
-    }
-
-    Result FlowMapOrkizhevskiy::calc()
+    Result FlowMapOrkizhevskiy::calc(
+        const PhaseInfo& Liquid,
+        const PhaseInfo& Gas,
+        const PhaseInteract& PhaseInteract,
+        double D,
+        double Roughness,
+        double Angle,
+        double PInflow,
+        double TInflow)
     {
         Result res;
         double Lb, Ap, lambda_L, Ngv, Ngvstr, Nlv, Ngvtrm;
-        Ap = PI * d * d / 4;
-        res.fluidMeanVelocity = (liquid.q + gas.q) / Ap;
-        Lb = 1.071 - 0.2218 * pow(res.fluidMeanVelocity / 0.3048, 2) * 0.3048 / d;//4.59
+        Ap = PI * D * D/ 4;
+        res.fluidMeanVelocity = (Liquid.q + Gas.q) / Ap;
+        Lb = 1.071 - 0.2218 * pow(res.fluidMeanVelocity / 0.3048, 2) * 0.3048 / D;//4.59
         if (Lb < 0.13)
         {
             Lb = 0.13;
         }
-        lambda_L = liquid.q / (liquid.q + gas.q);//3.8
+        lambda_L = Liquid.q / (Liquid.q + Gas.q);//3.8
 
-        Ngv = (gas.q / Ap) * pow(liquid.rho / (g * phaseInteract.lgSurfaceTension), 1 / 4);//4.4
-        Nlv = (liquid.q / Ap) * pow(liquid.rho / (g * phaseInteract.lgSurfaceTension), 1 / 4);//4.3
+        Ngv = (Gas.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1 / 4);//4.4
+        Nlv = (Liquid.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1 / 4);//4.3
         Ngvstr = 50 + 36 * Nlv;//4.32b
         Ngvtrm = 75 + 84 * pow(Nlv, 0.75);//4.32c
 
         if (1 - lambda_L <= Lb)
         {
-            res = BubbleMode();
+            res = BubbleMode( 
+                Liquid,
+                Gas,
+                PhaseInteract,
+                D,
+                Roughness,
+                Angle,
+                PInflow,
+                TInflow);
             res.flowPattern = FlowPattern::BubbleMode;
         }
         else if (Ngv < Ngvstr)
         {
-            res = CorkMode();
+            res = CorkMode(
+                Liquid,
+                Gas,
+                PhaseInteract,
+                D,
+                Roughness,
+                Angle,
+                PInflow,
+                TInflow);
             res.flowPattern = FlowPattern::CorkMode;
         }
 
         else if (Ngvstr < Ngv && Ngv < Ngvtrm)
         {
-            res = TransitionalMode();
+            res = TransitionalMode(
+                Liquid,
+                Gas,
+                PhaseInteract,
+                D,
+                Roughness,
+                Angle,
+                PInflow,
+                TInflow);
             res.flowPattern = FlowPattern::TransitionalMode;
         }
         else
         {
-            res = EmulsionMode();
+            res = EmulsionMode(
+                Liquid,
+                Gas,
+                PhaseInteract,
+                D,
+                Roughness,
+                Angle,
+                PInflow,
+                TInflow);
             res.flowPattern = FlowPattern::EmulsionMode;
         }
 
         return res;
-    }
-
-        vector<vector<int>>  FlowMapOrkizhevskiy::fillMap()
-    {
-        std::vector<std::vector<int>> Array;
-        double t, N_gv,N_Lv;
-        FlowPattern flowPattern;
-        t = pow(liquid.rho / (phaseInteract.lgSurfaceTension * g), 1. / 4);
-        //cout << t << "\n"; //debug?
-        for (N_Lv = 0.1; N_Lv <= 100; N_Lv += 0.1) // Ngv по х, а Nlv по у
-        {
-            std::vector<int> Temp;
-            for (N_gv = 0.5; N_gv <= 100; N_gv += 0.5) 
-            {
-                flowPattern = modeSelection( N_gv, N_Lv);
-                switch (flowPattern)
-                {
-                case flowmaps::FlowPattern::BubbleMode:
-                    Temp.push_back(0);
-                    break;
-                case flowmaps::FlowPattern::CorkMode:
-                    Temp.push_back(1);
-                    break;
-                case flowmaps::FlowPattern::TransitionalMode:
-                    Temp.push_back(2);
-                    break;
-                case flowmaps::FlowPattern::EmulsionMode:
-                    Temp.push_back(3);
-                    break;
-                default:
-                    Temp.push_back(4);
-                    break;
-                }
-               
-            }
-            for (N_gv = 101; N_gv <= 1000; N_gv += 1) 
-            {
-                flowPattern = modeSelection( N_gv, N_Lv);
-                switch (flowPattern)
-                {
-                case flowmaps::FlowPattern::BubbleMode:
-                    Temp.push_back(0);
-                    break;
-                case flowmaps::FlowPattern::CorkMode:
-                    Temp.push_back(1);
-                    break;
-                case flowmaps::FlowPattern::TransitionalMode:
-                    Temp.push_back(2);
-                    break;
-                case flowmaps::FlowPattern::EmulsionMode:
-                    Temp.push_back(3);
-                    break;
-                default:
-                    Temp.push_back(4);
-                    break;
-                }
-            }
-            Array.push_back(Temp);
-        }
-        return Array;
-        //Раскрашивание в цвет в зависимости от режима
-    }
-
-    FlowPattern FlowMapOrkizhevskiy::modeSelection(
-        double N_gv,
-        double N_Lv
-        )
-    {
-        Result res;
-        double lambda_B, v_m, lambda_L, Ngvstr, Ngvtrm,t;
-        FlowPattern flowPattern;
-
-        t = pow(liquid.rho / (phaseInteract.lgSurfaceTension*g), 1. / 4);
-        v_m = t/ N_gv + t/ N_Lv;
-        lambda_B = 1.071 - 0.2218 * pow(v_m / 0.3048, 2) * 0.3048 / d;//4.59
-        if (lambda_B < 0.13)
-        {
-            lambda_B = 0.13;
-        }
-        //lambda_L = N_gv / t;
-        lambda_L = N_Lv / (N_gv + N_Lv);
-
-        Ngvstr = 50 + 36 * N_Lv;//4.32b
-        Ngvtrm = 75 + 84 * pow(N_Lv, 0.75);//4.32c
-       
-        if (1 - lambda_L <= lambda_B)
-        {
-            flowPattern = FlowPattern::BubbleMode;
-        }
-        else if (N_gv < Ngvstr)
-        {
-            flowPattern = FlowPattern::CorkMode;
-        }
-        else if (Ngvstr < N_gv && N_gv < Ngvtrm)
-        {
-            flowPattern = FlowPattern::TransitionalMode;
-        }
-        else
-        {
-            flowPattern = FlowPattern::EmulsionMode;
-        }
-
-        return flowPattern;
-    }
-   
+    } 
 } // namespace flowmaps

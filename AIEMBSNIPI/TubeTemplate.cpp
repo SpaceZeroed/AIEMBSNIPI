@@ -103,7 +103,27 @@ void Map(int x, int y, vector<vector<int>> Array)
 	Angle = 90;
 	////работа с взаимодействием фаз 
 	double SurfaceTension = 0.0084;
-	
+
+	double qo = qo_ny * Bo;
+	double qw = qw_ny * Bw;
+
+	double fo = qo / (qw + qo);
+	double fw = 1 - fo;
+
+	mainFase = DefineMainFase(mu_o, fw);
+	liquid.q = qo + qw;
+	liquid.mu = mu_o * fo + mu_w * fw;
+	liquid.rho = rho_o * fo + rho_w * fw;
+	liquid.rho_sc = liquid.rho;
+
+
+	gas.mu = mu_g;
+	gas.q = (qg_ny - qo_ny * Rs - qw_ny * Rsw) * Bg;
+	gas.rho = rho_g;
+	gas.rho_sc = gas.rho;
+
+	phaseInteract.lgSurfaceTension = SurfaceTension;
+
 	flow.setLiquid(qo_ny, qw_ny, Bo, Bw, mu_o, mu_w, rho_o, rho_w);
 	flow.setGas(qg_ny, qo_ny, qw_ny, mu_g, Rs, Rsw, Bg, rho_g);
 	flow.setPhaseInteract(SurfaceTension);
