@@ -11,6 +11,7 @@ using namespace flowmaps;
 
  int main()
 {
+<<<<<<< HEAD
 	system("mode con cols=160 lines=40"); // размер окна. Вроде 1600 на 400 пикселей
 	SetConsoleTitle(L"Pressure calculation"); // заголовок окна
 	setlocale(LC_CTYPE, "rus"); // вызов функции настройки национальных параметров
@@ -22,7 +23,8 @@ using namespace flowmaps;
 
 	double Bo, //объемный коэффициент нефти
 		Bg, //объемный коэффициент газа
-		Rs, //
+		Rs, //растворимость газа
+		Rsw, //растворимость газа
 		D, //диаметр трубы
 		qw_ny, //объемный расход воды
 		qo_ny, //объемный расход нефти
@@ -30,14 +32,16 @@ using namespace flowmaps;
 		Bw, //объемный коэффициент воды
 		mu_o, //вязкость нефти
 		mu_w, //вязкость воды
-		rho_o, //
-		rho_w, //
+		mu_g, //вязкость газа
+		rho_o, //плотность нефти
+		rho_w, //плотность воды
+		rho_g,//плотность газа
 		Rsw, //
-		Roughness, // 
-		Angle, // 
-		PInflow, //
-		TInflow; //
-	double Bo, Bg, Rs, D, qw_ny, qo_ny, qg_ny, Bw, mu_o, mu_w, rho_o, rho_w, Rsw, Roughness, Angle, PInflow, TInflow;
+		Roughness, // шероховатость
+		Angle, // угол
+		PInflow, //давление на входе
+		TInflow, //температура на входе
+		SurfaceTension, // 
 	//  начальные условия  
 	FlowMapOrkizhevskiy flow;
 	Result grad;
@@ -61,8 +65,8 @@ using namespace flowmaps;
 	Rsw = 0;
 	rho_w = 1000;
 	mu_w = 1;
-	double mu_g = 0.000016;
-	double rho_g = 94.19;
+	mu_g = 0.000016;
+	rho_g = 94.19;
 	Angle = 90;
 	////работа с взаимодействием фаз 
 	double SurfaceTension = 0.0084;
