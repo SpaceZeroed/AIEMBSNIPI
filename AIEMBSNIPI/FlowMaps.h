@@ -107,7 +107,8 @@ namespace flowmaps
     class IFlowMapLiquidGas
     {
     public:
-        virtual Result calc(const PhaseInfo& Liquid,
+        virtual Result calc(
+            const PhaseInfo& Liquid,
             const PhaseInfo& Gas,
             const PhaseInteract& PhaseInteract,
             double D,
