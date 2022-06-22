@@ -42,7 +42,8 @@ namespace flowmaps
             double Roughness,
             double Angle,
             double PInflow,
-            double TInflow);
+            double TInflow,
+            MainFase mainFase);
 
         Result EmulsionMode(
             const PhaseInfo& Liquid,
@@ -62,7 +63,8 @@ namespace flowmaps
             double Roughness,
             double Angle,
             double PInflow,
-            double TInflow);
+            double TInflow,
+            MainFase mainFase);
 
         double MethodMarch(
             double Length, 
