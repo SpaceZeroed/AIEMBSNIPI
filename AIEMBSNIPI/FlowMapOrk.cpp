@@ -20,7 +20,10 @@ namespace flowmaps
         double TInflow)
     {
         Result res;
-        double Vs, HL, Ap, Ed;
+        double Vs, 
+            HL, // ОбЪемное содержание жидкости c учетом эффекта проскальзования
+            Ap, // Площадь сечения
+            Ed; // Шероховатость на диаметр 
         res.flowPattern = FlowPattern::BubbleMode;
         Ap = PI * D * D / 4;
         res.fluidMeanVelocity = (Liquid.q + Gas.q) / Ap;
@@ -45,9 +48,18 @@ namespace flowmaps
         MainFase mainFase)
     {
         Result res;
-        double Ap, Ed, Vb1, Vb2, Re_B, Vbs, liqDistribCoef, X, rho_s, pn, lambda_L, mu_n; // добавить комменты..;
-        /*
-        */
+        double Ap, // Площадь сечения, м^2
+            Ed, // Шероховатость на диаметр
+            Vb1, // Скорость подъема пузырька, м/c
+            Vb2, // Скорость подъема пузырька, м/c
+            Vbs, // Скорость пузыря в статической жидкости, м/c
+            liqDistribCoef, // Коэффициент распределения жидкости Г
+            X, 
+            rho_s, // Плотность потока, кг/м^3
+            rho_n, // Плотность без учета эффекта проскальзования, кг/м^3
+            lambda_L, // Объемное содержание жидкости без учета эффекта проскальзования
+            mu_n; // Вязкость без учета эффекта проскальзования, Па*с
+        
         res.flowPattern = FlowPattern::CorkMode;
         Ap = PI * D * D / 4;
         res.fluidMeanVelocity = (Liquid.q + Gas.q) / Ap;
@@ -55,16 +67,17 @@ namespace flowmaps
         res.gasVelocity = Gas.q / Ap;
         res.Re_L = Liquid.rho * res.fluidMeanVelocity * D / Liquid.mu;//4.66
         Vb2 = 0.5 * sqrt(g * D);//4.71
-        Re_B = Liquid.rho * Vb2 * D / Liquid.mu;//4.66
+        //Re_B = Liquid.rho * Vb2 * D / Liquid.mu;//4.66
+        res.Re_G = Liquid.rho * Vb2 * D / Liquid.mu;//4.66
 
         do
         {
             Vb1 = Vb2;
-            if (Re_B <= 3000)
+            if (res.Re_G <= 3000)
             {
                 Vb2 = (0.546 + 8.74 * 0.000001 * res.Re_L) * sqrt(g * D);//4.67
             }
-            else if (Re_B >= 8000)
+            else if (res.Re_G >= 8000)
             {
                 Vb2 = (0.35 + 8.74 * 0.000001 * res.Re_L) * sqrt(g * D);//4.68
             }
@@ -105,9 +118,9 @@ namespace flowmaps
         Ed = Roughness / D;
         
         lambda_L = Liquid.q / (Liquid.q + Gas.q);//3.8
-        pn = Liquid.rho * lambda_L + Gas.rho * (1 - lambda_L);//3.23
-        mu_n = Liquid.mu * lambda_L + Gas.mu * (1 - lambda_L);//3.23
-        res.Re = pn * res.fluidMeanVelocity * D / mu_n;
+        rho_n = Liquid.rho * lambda_L + Gas.rho * (1 - lambda_L);//3.23
+        mu_n = Liquid.mu * lambda_L + Gas.mu * (1 - lambda_L);//3.21
+        res.Re = rho_n * res.fluidMeanVelocity * D / mu_n;
         res.frictionFactor = pow(-2 * log10(2 * Ed / 3.7 - (5.02 / res.Re) * log10(2 * Ed / 3.7 + 13 / res.Re)), -2);//2.19
         res.pressureGradientFriction = ((res.liquidVelocity + Vb2) / (res.fluidMeanVelocity + Vb2) + liqDistribCoef) * res.frictionFactor * Liquid.rho * pow(res.fluidMeanVelocity, 2) / (2 * D);//4.79
         res.pressureGradient = res.pressureGradientFriction + rho_s * g;//4.31
@@ -126,7 +139,16 @@ namespace flowmaps
         double TInflow)
     {
         Result res;
-        double Ap, N_we, N_mu, Ed, Vsg, E_k, rho_n, rho_s, pn, lambda_L, mu_n;;
+        double Ap, // Площадь сечения, м^2
+            N_we, // Число Вебера
+            N_mu, // Безразмерный показатель, зависящий от вязкости
+            Ed, // Шероховатость на диаметр
+            Vsg, // Приведенная скорость газа
+            E_k, // Кинетическая энергия, Дж
+            rho_n, // Плотность без учета эффекта проскальзования, кг/м^3
+            rho_s, // Плотность без учета эффекта проскальзования, кг/м^3
+            lambda_L, // Объемное  содержание жидкости без учета эффекта проскальзования
+            mu_n; // Вязкость без учета эффекта проскальзования, Па*с
         res.flowPattern = FlowPattern::EmulsionMode;
         Ap = PI * D * D / 4;
         Vsg = Gas.q / Ap; //3.11
@@ -145,9 +167,9 @@ namespace flowmaps
 
         
         lambda_L = Liquid.q / (Liquid.q + Gas.q);//3.8
-        pn = Liquid.rho * lambda_L + Gas.rho * (1 - lambda_L);//3.23
+        rho_n = Liquid.rho * lambda_L + Gas.rho * (1 - lambda_L);//3.23
         mu_n = Liquid.mu * lambda_L + Gas.mu * (1 - lambda_L);//3.23
-        res.Re = pn * res.fluidMeanVelocity * D / mu_n;
+        res.Re = rho_n * res.fluidMeanVelocity * D / mu_n;
 
         if (Ed > 0.05)
         {
@@ -161,10 +183,8 @@ namespace flowmaps
         res.pressureGradientFriction = res.frictionFactor * Gas.rho * pow(Vsg, 2) / (2 * D); //4,45
         res.fluidMeanVelocity = (Liquid.q + Gas.q) / Ap; // fluidMeanVelocity = Vm
 
-        lambda_L = Liquid.q / (Liquid.q + Gas.q);//3.8
-        rho_n = lambda_L * Liquid.rho + Gas.rho * (1 - lambda_L);//3.23
-        E_k = res.fluidMeanVelocity * Vsg * rho_n / PInflow;
-        // 104
+   
+        E_k = res.fluidMeanVelocity * Vsg * rho_n / PInflow;// 4.53
         rho_s = Liquid.rho * lambda_L + Gas.rho * (1 - lambda_L);//3.22
         //       
         res.pressureGradientElevation = rho_s * g;
@@ -184,7 +204,12 @@ namespace flowmaps
         MainFase mainFase)
     {
         Result resCork, resEmul, res;
-        double Ngvstr, Ngvtrm, Ap, Ngv, Nlv, A;
+        double Ngvstr, // Граница между пробковым и переходным 
+            Ngvtrm, // Граница между переходным и эмульсионным
+            Ap, // Площадь сечения, м^2
+            Ngv, // Показатель скорости газа
+            Nlv, // Показатель скорости газа 
+            A; // Коэффициент линейной интерполяции
         res.flowPattern = FlowPattern::TransitionalMode;
         Ap = PI * D * D / 4;
         resCork = CorkMode(
@@ -248,7 +273,7 @@ namespace flowmaps
         return deltaP;
     }
 
-    MainFase DefineMainFase(double mu_o, double fw)
+    MainFase DefineMainFase(double mu_o, double fw) // Рис. 3.3
     {
         double x, y;
         y = mu_o * 1000;
@@ -275,7 +300,13 @@ namespace flowmaps
         double TInflow)
     {
         Result res;
-        double Lb, Ap, lambda_L, Ngv, Ngvstr, Nlv, Ngvtrm;
+        double Lb, // Параметр уравнения
+            Ap,  // Площадь сечения, м^2
+            lambda_L, // Объемное  содержание жидкости без учета эффекта проскальзования
+            Ngv, // Показатель скорости газа
+            Ngvstr, // Граница между пробковым и переходным 
+            Nlv, // Показатель скорости жидкость
+            Ngvtrm; // Граница между переходным и эмульсионным
         Ap = PI * D * D/ 4;
 
         double fo = Oil.q / (Water.q + Oil.q);//доля нефти
