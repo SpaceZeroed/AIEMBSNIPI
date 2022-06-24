@@ -58,7 +58,8 @@ namespace flowmaps
             rho_s, // Плотность потока, кг/м^3
             rho_n, // Плотность без учета эффекта проскальзования, кг/м^3
             lambda_L, // Объемное содержание жидкости без учета эффекта проскальзования
-            mu_n; // Вязкость без учета эффекта проскальзования, Па*с
+            mu_n,// Вязкость без учета эффекта проскальзования, Па*с
+            Re_B; 
         
         res.flowPattern = FlowPattern::CorkMode;
         Ap = PI * D * D / 4;
@@ -67,7 +68,7 @@ namespace flowmaps
         res.gasVelocity = Gas.q / Ap;
         res.Re_L = Liquid.rho * res.fluidMeanVelocity * D / Liquid.mu;//4.66
         Vb2 = 0.5 * sqrt(g * D);//4.71
-        //Re_B = Liquid.rho * Vb2 * D / Liquid.mu;//4.66
+        Re_B = Liquid.rho * Vb2 * D / Liquid.mu;//4.66
         res.Re_G = Liquid.rho * Vb2 * D / Liquid.mu;//4.66
 
         do
@@ -344,6 +345,7 @@ namespace flowmaps
                 PInflow,
                 TInflow);
             res.flowPattern = FlowPattern::BubbleMode;
+            cout << "BubbleMode";
         }
         else if (Ngv < Ngvstr)
         {
@@ -358,6 +360,7 @@ namespace flowmaps
                 TInflow,
                 mainFase);
             res.flowPattern = FlowPattern::CorkMode;
+            cout << "CorkMode";
         }
 
         else if (Ngvstr < Ngv && Ngv < Ngvtrm)
@@ -373,6 +376,7 @@ namespace flowmaps
                 TInflow,
                 mainFase);
             res.flowPattern = FlowPattern::TransitionalMode;
+            cout << "TransitionalMode";
         }
         else
         {
@@ -386,6 +390,7 @@ namespace flowmaps
                 PInflow,
                 TInflow);
             res.flowPattern = FlowPattern::EmulsionMode;
+            cout << "EmulsionMode";
         }
 
         return res;
