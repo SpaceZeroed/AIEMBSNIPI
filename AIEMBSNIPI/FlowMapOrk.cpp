@@ -301,6 +301,7 @@ namespace flowmaps
         {
             res = EmulsionMode();
             res.flowPattern = FlowPattern::EmulsionMode;
+            cout << "EmulsionMode";
         }
 
         return res;
