@@ -86,7 +86,7 @@ namespace flowmaps
                 Vbs = (0.251 + 8.74 * 0.000001 * res.Re_L) * sqrt(g * D);//4.70
                 Vb2 = 0.5 * (Vbs + sqrt(pow(Vbs, 2) + 13.59 * Liquid.mu / (Liquid.rho * sqrt(D))));//4.69
             }
-            Re_B = Liquid.rho * Vb2 * D / Liquid.mu;//4.66
+            res.Re_G = Liquid.rho * Vb2 * D / Liquid.mu;//4.66
         } while (abs(Vb1 - Vb2) / Vb1 > 0.05);
 
         if (mainFase == MainFase::Oil)
