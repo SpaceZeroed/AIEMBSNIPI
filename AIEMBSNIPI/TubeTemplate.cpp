@@ -55,7 +55,7 @@ using namespace flowmaps;
 
 	PhaseInfo Gas;
 	Gas.mu = mu_g;
-	Gas.q = (qg_ny - qo_ny * Rs - qw_ny * Rsw) * Bg;
+	Gas.q = (qg_ny - qo_ny * Rs - qw_ny * Rsw)* Bg;
 	Gas.rho = rho_g;
 	Gas.rho_sc = Gas.rho;
 

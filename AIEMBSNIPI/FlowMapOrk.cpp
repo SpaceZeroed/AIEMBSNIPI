@@ -231,8 +231,8 @@ namespace flowmaps
             Angle,
             PInflow,
             TInflow);
-        Ngv = (Gas.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1 / 4);//4.4
-        Nlv = (Liquid.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1 / 4);//4.3
+        Ngv = (Gas.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1. / 4);//4.4
+        Nlv = (Liquid.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1. / 4);//4.3
         Ngvstr = 50 + 36 * Nlv;//4.32b
         Ngvtrm = 75 + 84 * pow(Nlv, 0.75);//4.32c
         A = (Ngvtrm - Ngv) / (Ngvtrm - Ngvstr);//4.56
@@ -327,8 +327,8 @@ namespace flowmaps
         }
         lambda_L = Liquid.q / (Liquid.q + Gas.q);//3.8
 
-        Ngv = (Gas.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1 / 4);//4.4
-        Nlv = (Liquid.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1 / 4);//4.3
+        Ngv = (Gas.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1. / 4);//4.4
+        Nlv = (Liquid.q / Ap) * pow(Liquid.rho / (g * PhaseInteract.lgSurfaceTension), 1. / 4);//4.3
         Ngvstr = 50 + 36 * Nlv;//4.32b
         Ngvtrm = 75 + 84 * pow(Nlv, 0.75);//4.32c
 
